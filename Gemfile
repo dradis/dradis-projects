@@ -15,6 +15,3 @@ gemspec
 
 # To use debugger
 # gem 'debugger'
-
-gem 'dradis_core', path: '../d3arsenal/engines/core'
-gem 'dradis-plugins', path: '../dradis-plugins'
