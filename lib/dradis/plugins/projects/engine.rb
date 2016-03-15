@@ -8,6 +8,12 @@ module Dradis
         description 'Save and restore project information'
         provides :export, :upload
 
+        initializer 'dradis-projects.mount_engine' do
+          Rails.application.routes.append do
+            mount Dradis::Plugins::Projects::Engine => '/export/projects'
+          end
+        end
+
         # Because this plugin provides two export modules, we have to overwrite
         # the default .uploaders() method.
         # def self.uploaders

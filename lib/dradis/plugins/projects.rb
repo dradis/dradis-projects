@@ -8,8 +8,8 @@ module Dradis
 end
 
 require 'dradis/plugins/projects/engine'
-# require 'dradis/plugins/projects/export/package'
-# require 'dradis/plugins/projects/export/template'
+require 'dradis/plugins/projects/export/package'
+require 'dradis/plugins/projects/export/template'
 # require 'dradis/plugins/projects/upload/package'
 # require 'dradis/plugins/projects/upload/template'
 require 'dradis/plugins/projects/version'
