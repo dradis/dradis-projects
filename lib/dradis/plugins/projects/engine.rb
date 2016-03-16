@@ -16,12 +16,15 @@ module Dradis
 
         # Because this plugin provides two export modules, we have to overwrite
         # the default .uploaders() method.
-        # def self.uploaders
-        #   [
-        #     Dradis::Plugins::Projects::Upload::Package,
-        #     Dradis::Plugins::Projects::Upload::Template
-        #   ]
-        # end
+        #
+        # See:
+        #  Dradis::Plugins::Upload::Base in dradis-plugins
+        def self.uploaders
+          [
+            Dradis::Plugins::Projects::Upload::Package,
+            Dradis::Plugins::Projects::Upload::Template
+          ]
+        end
       end
     end
   end

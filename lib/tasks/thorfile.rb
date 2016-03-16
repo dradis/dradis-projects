@@ -67,3 +67,73 @@ class ExportTasks < Thor
   end
 
 end
+
+class UploadTasks < Thor
+  include Dradis::Plugins::thor_helper_module.to_s.constantize
+
+  namespace   "dradis:plugins:projects:upload"
+
+  # This task will load into the current database the contents of the template
+  # file passed as the first argument
+  desc "template FILE", "create a new repository structure from an XML file"
+  def template(file_path)
+    require 'config/environment'
+
+    logger = Logger.new(STDOUT)
+    logger.level = Logger::DEBUG
+
+    unless File.exists?(file_path)
+      $stderr.puts "** the file [#{file_path}] does not exist"
+      exit -1
+    end
+
+    detect_and_set_project_scope
+
+    content_service  = content_service_for(Dradis::Plugins::Projects::Upload::Template)
+    template_service = Dradis::Plugins::TemplateService.new(plugin: Dradis::Plugins::Projects::Upload::Template)
+
+    importer = Dradis::Plugins::Projects::Upload::Template::Importer.new(
+      logger:           logger,
+      content_service:  content_service,
+      template_service: template_service
+    )
+
+    importer.import(file: file_path)
+
+    logger.close
+  end
+
+
+  # The reverse operation to the dradis:export:project:package task. From a
+  # zipped project package extract the contents of the archive and populate
+  # the dradis DB and attachments with them.
+  desc "package FILE", "import an entire repository package"
+  def package(file_path)
+    require 'config/environment'
+
+    logger = Logger.new(STDOUT)
+    logger.level = Logger::DEBUG
+
+    unless File.exists?(file_path)
+      $stderr.puts "** the file [#{file_path}] does not exist"
+      exit -1
+    end
+
+
+    detect_and_set_project_scope
+
+    content_service  = content_service_for(Dradis::Plugins::Projects::Upload::Package)
+    template_service = Dradis::Plugins::TemplateService.new(plugin: Dradis::Plugins::Projects::Upload::Package)
+
+    importer = Dradis::Plugins::Projects::Upload::Package::Importer.new(
+                logger: logger,
+       content_service: content_service,
+      template_service: template_service
+    )
+
+    importer.import(file: file_path)
+
+    logger.close
+  end
+
+end
