@@ -63,7 +63,7 @@ module Dradis::Plugins::Projects::Export
     end
 
     def build_issues(builder)
-      @issues = Issue.where(node_id: Node.issue_library)
+      @issues = Issue.where(node_id: Node.issue_library).includes(:activities)
 
       builder.issues do |issues_builder|
         @issues.each do |issue|
@@ -93,7 +93,7 @@ module Dradis::Plugins::Projects::Export
     end
 
     def build_nodes(builder)
-      @nodes = Node.includes(:notes, notes: [:category]).all.reject do |node|
+      @nodes = Node.includes(:activities, :evidence, :notes, evidence: [:activities], notes: [:activities, :category]).all.reject do |node|
         [Node::Types::METHODOLOGY,
           Node::Types::ISSUELIB].include?(node.type_id)
       end
