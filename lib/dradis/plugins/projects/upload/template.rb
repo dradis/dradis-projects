@@ -325,13 +325,18 @@ module Dradis::Plugins::Projects::Upload
           action:     xml_activity.at_xpath("action").text,
           created_at: Time.at(xml_activity.at_xpath("created_at").text.to_i)
         )
-        activity.user = if Activity.column_names.include?('user')
-                          xml_activity.at_xpath("user_email").text
-                        else
-                          user_id_for_email(xml_activity.at_xpath("user_email").text)
-                        end
+
+        set_activity_user(activity, xml_activity.at_xpath("user_email").text)
 
         validate_and_save(activity)
+      end
+
+      def set_activity_user(activity, email)
+        if Activity.column_names.include?('user')
+          activity.user = email
+        else
+          activity.user_id = user_id_for_email(email)
+        end
       end
 
       # Cache users to cut down on excess SQL requests
