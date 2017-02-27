@@ -2,7 +2,7 @@ module Dradis::Plugins::Projects::Export::V1
   class Template < Dradis::Plugins::Projects::Export::Template
     VERSION = 1
 
-    private
+    protected
 
     def build_activities_for(builder, trackable)
       builder.activities do |activities_builder|

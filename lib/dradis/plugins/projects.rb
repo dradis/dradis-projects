@@ -13,3 +13,7 @@ require 'dradis/plugins/projects/export/template'
 require 'dradis/plugins/projects/upload/package'
 require 'dradis/plugins/projects/upload/template'
 require 'dradis/plugins/projects/version'
+
+module Dradis::Plugins::Projects
+  ActiveSupport.run_load_hooks(:dradis_projects, self)
+end
