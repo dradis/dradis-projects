@@ -2,7 +2,7 @@ module Dradis::Plugins::Projects::Export
   class Template < Dradis::Plugins::Export::Base
     # This method returns an XML representation of current repository which
     # includes Categories, Nodes and Notes
-    def export(params={})
+    def export(args={})
       builder = Builder::XmlMarkup.new
       builder.instruct!
       result = builder.tag!('dradis-template', version: version) do |template_builder|
