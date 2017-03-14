@@ -156,8 +156,12 @@ module Dradis::Plugins::Projects::Export::V1
       @user_emails[activity.user_id]
     end
 
+    # Use the class VERSION constant, but allow for subclasses to overwrite it.
+    #
+    # See:
+    #   http://stackoverflow.com/questions/3174563/how-to-use-an-overridden-constant-in-an-inheritanced-class
     def version
-      VERSION
+      self.class::VERSION
     end
   end
 end
