@@ -43,6 +43,28 @@ module Dradis::Plugins::Projects::Upload
           logger: logger
         ).parse(template)
       end
+
+      def parse(template)
+        parse_categories(template)
+        parse_nodes(template)
+        parse_issues(template)
+        parse_methodologies(template)
+        parse_tags(template)
+        finalize(template)
+      rescue Exception => e
+        logger.fatal { e.message }
+        logger.fatal { e.backtrace } if Rails.env.development?
+        return false
+      end
+
+      private
+
+      def finalize(template);            raise NotImplementedError; end
+      def parse_categories(template);    raise NotImplementedError; end
+      def parse_issues(template);        raise NotImplementedError; end
+      def parse_methodologies(template); raise NotImplementedError; end
+      def parse_nodes(template);         raise NotImplementedError; end
+      def parse_tags(template);          raise NotImplementedError; end
     end
   end
 end
