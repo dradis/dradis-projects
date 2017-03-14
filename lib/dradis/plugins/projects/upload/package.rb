@@ -21,7 +21,7 @@ module Dradis::Plugins::Projects::Upload
         FileUtils.mkdir Rails.root.join('tmp', 'zip')
 
         begin
-          logger.info { 'Uncompressing the file' }
+          logger.info { 'Uncompressing the file...' }
           #TODO: this could be improved by only uncompressing the XML, then parsing
           # it to get the node_lookup table and then uncompressing each entry to its
           # final destination
@@ -33,18 +33,18 @@ module Dradis::Plugins::Projects::Upload
           end
           logger.info { 'Done.' }
 
-          logger.info { 'Loading XML state file' }
-          importer    = Template::Importer.new(
-                          content_service:  content_service,
-                          logger:           logger,
-                          template_service: template_service
-                        )
-          node_lookup = importer.import(
-                          file: Rails.root.
-                                  join('tmp', 'zip', 'dradis-repository.xml')
-                        )
 
-          logger.info { 'Moving attachments to their final destinations' }
+          logger.info { 'Loading XML template file...' }
+          template_file = Rails.root.join('tmp', 'zip', 'dradis-repository.xml')
+          importer    = Template::Importer.new(
+                          logger: logger,
+                          plugin: Dradis::Plugins::Projects::Upload::Template
+                        )
+          node_lookup = importer.import(file: template_file)
+          logger.info { 'Done.' }
+
+
+          logger.info { 'Moving attachments to their final destinations...' }
           node_lookup.each do |oldid,newid|
             if File.directory? Rails.root.join('tmp', 'zip', oldid)
               FileUtils.mkdir_p Attachment.pwd.join(newid.to_s)
@@ -54,6 +54,7 @@ module Dradis::Plugins::Projects::Upload
               end
             end
           end
+          logger.info { 'Done.' }
 
           success = true
         rescue Exception => e
