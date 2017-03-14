@@ -10,6 +10,7 @@ module Dradis::Plugins::Projects::Upload
     end
 
     class Importer < Dradis::Plugins::Upload::Importer
+      attr_accessor :template_version
 
       # The import method is invoked by the framework to process a template file
       # that has just been uploaded using the 'Import from file...' dialog.
@@ -39,12 +40,25 @@ module Dradis::Plugins::Projects::Upload
           return false
         end
 
-        parser = Rails.application.config.dradis.projects.template_uploader.new(
-          logger: logger
-        ).parse(template)
+        if template.xpath('/dradis-template').empty?
+          error = "The uploaded file doesn't look like a Dradis project template (/dradis-template)."
+          logger.fatal{ error }
+          content_service.create_note text: error
+          return false
+        end
+
+        # :options contains all the options we've received from the framework.
+        #
+        # See:
+        #   Dradis::Plugins::Upload::Importer#initialize
+        Rails.application.config.dradis.projects.template_uploader.new(options)
+          .parse(template)
       end
 
       def parse(template)
+        @template_version = template.root[:version].try(:to_i) || 1
+        logger.info { "Parsing Dradis template version #{template_version.inspect}" }
+
         parse_categories(template)
         parse_nodes(template)
         parse_issues(template)
