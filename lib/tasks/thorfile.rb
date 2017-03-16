@@ -1,7 +1,7 @@
 require 'logger'
 
 class ExportTasks < Thor
-  include Dradis::Plugins::thor_helper_module.to_s.constantize
+  include Rails.application.config.dradis.thor_helper_module
 
   namespace   "dradis:plugins:projects:export"
 
@@ -10,9 +10,16 @@ class ExportTasks < Thor
   def template
     require 'config/environment'
 
+    # The options we'll end up passing to the Processor class
+    opts = {}
+
+    STDOUT.sync   = true
     logger        = Logger.new(STDOUT)
     logger.level  = Logger::DEBUG
+    opts[:logger] = logger
+
     template_path = options.file || Rails.root.join('backup').to_s
+    FileUtils.mkdir_p(template_path) unless File.exist?(template_path)
 
     unless template_path =~ /\.xml\z/
       date          = DateTime.now.strftime("%Y-%m-%d")
@@ -25,10 +32,9 @@ class ExportTasks < Thor
 
     detect_and_set_project_scope
 
-    exporter = Dradis::Plugins::Projects::Export::Template.new(
-      content_service: content_service_for(Dradis::Plugins::Projects::Export::Template),
-      logger: logger
-    )
+    exporter_class = Rails.application.config.dradis.projects.template_exporter
+    export_options = opts.merge(plugin: Dradis::Plugins::Projects)
+    exporter       = exporter_class.new(export_options)
 
     File.open(template_path, 'w') { |f| f.write exporter.export() }
 
@@ -45,11 +51,18 @@ class ExportTasks < Thor
   def package
     require 'config/environment'
 
+    # The options we'll end up passing to the Processor class
+    opts = {}
+
+    STDOUT.sync   = true
     logger        = Logger.new(STDOUT)
     logger.level  = Logger::DEBUG
-    package_path  = options.file || Rails.root.join('backup')
+    opts[:logger] = logger
 
-    unless package_path =~ /\.zip\z/
+    package_path  = options.file || Rails.root.join('backup')
+    FileUtils.mkdir_p(package_path) unless File.exist?(package_path)
+
+    unless package_path.to_s =~ /\.zip\z/
       date      = DateTime.now.strftime("%Y-%m-%d")
       sequence  = Dir.glob(File.join(package_path, "dradis-export_#{date}_*.zip")).collect { |a| a.match(/_([0-9]+)\.zip\z/)[1].to_i }.max || 0
       package_path = File.join(package_path, "dradis-export_#{date}_#{sequence + 1}.zip")
@@ -57,10 +70,9 @@ class ExportTasks < Thor
 
     detect_and_set_project_scope
 
-    Dradis::Plugins::Projects::Export::Package.new(
-      content_service: content_service_for(Dradis::Plugins::Projects::Export::Package),
-      logger: logger
-    ).export(filename: package_path)
+    export_options = opts.merge(plugin: Dradis::Plugins::Projects)
+    Dradis::Plugins::Projects::Export::Package.new(export_options).
+      export(filename: package_path)
 
     logger.info{ "Project package created at:\n\t#{ File.expand_path( package_path ) }" }
     logger.close
@@ -69,7 +81,7 @@ class ExportTasks < Thor
 end
 
 class UploadTasks < Thor
-  include Dradis::Plugins::thor_helper_module.to_s.constantize
+  include Rails.application.config.dradis.thor_helper_module
 
   namespace   "dradis:plugins:projects:upload"
 
@@ -89,7 +101,7 @@ class UploadTasks < Thor
 
     detect_and_set_project_scope
 
-    content_service  = content_service_for(Dradis::Plugins::Projects::Upload::Template)
+    content_service  = Dradis::Plugins::ContentService.new(plugin: Dradis::Plugins::Projects::Upload::Template)
     template_service = Dradis::Plugins::TemplateService.new(plugin: Dradis::Plugins::Projects::Upload::Template)
 
     importer = Dradis::Plugins::Projects::Upload::Template::Importer.new(
@@ -122,7 +134,7 @@ class UploadTasks < Thor
 
     detect_and_set_project_scope
 
-    content_service  = content_service_for(Dradis::Plugins::Projects::Upload::Package)
+    content_service  = Dradis::Plugins::ContentService.new(plugin: Dradis::Plugins::Projects::Upload::Package)
     template_service = Dradis::Plugins::TemplateService.new(plugin: Dradis::Plugins::Projects::Upload::Package)
 
     importer = Dradis::Plugins::Projects::Upload::Package::Importer.new(

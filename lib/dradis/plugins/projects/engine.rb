@@ -4,6 +4,8 @@ module Dradis
       class Engine < ::Rails::Engine
         isolate_namespace Dradis::Plugins::Projects
 
+        config.dradis.projects = ActiveSupport::OrderedOptions.new
+
         include ::Dradis::Plugins::Base
         description 'Save and restore project information'
         provides :export, :upload
@@ -13,6 +15,13 @@ module Dradis
             mount Dradis::Plugins::Projects::Engine => '/export/projects'
           end
         end
+
+        initializer "dradis-projects.set_configs" do |app|
+          options = app.config.dradis.projects
+          options.template_exporter ||= Dradis::Plugins::Projects::Export::V1::Template
+          options.template_uploader ||= Dradis::Plugins::Projects::Upload::V1::Template::Importer
+        end
+
 
         # Because this plugin provides two export modules, we have to overwrite
         # the default .uploaders() method.

@@ -4,15 +4,16 @@ module Dradis::Plugins::Projects::Export
     # Create a new project export bundle. It will include an XML file with the
     # contents of the repository (see db_only) and all the attachments that
     # have been uploaded into the system.
-    def export(params={})
-      raise ":filename not provided" unless params.key?(:filename)
+    def export(args={})
+      raise ":filename not provided" unless args.key?(:filename)
 
-      filename = params[:filename]
-      logger   = params.fetch(:logger, Rails.logger)
+      filename = args[:filename]
+      logger   = options.fetch(:logger, Rails.logger)
 
       File.delete(filename) if File.exists?(filename)
 
       logger.debug{ "Creating a new Zip file in #{filename}..." }
+
       Zip::File.open(filename, Zip::File::CREATE) do |zipfile|
         Node.all.each do |node|
           node_path = Attachment.pwd.join(node.id.to_s)
@@ -24,12 +25,16 @@ module Dradis::Plugins::Projects::Export
         end
 
         logger.debug{ "\tAdding XML repository dump" }
-        template_exporter = Template.new(content_service: content_service)
-        template = template_exporter.export(params)
+
+        exporter_class    = Rails.application.config.dradis.projects.template_exporter
+        template_exporter = exporter_class.new(options)
+        template          = template_exporter.export
+
         zipfile.get_output_stream('dradis-repository.xml') { |out|
           out << template
         }
       end
+
       logger.debug{ 'Done.' }
     end
 
