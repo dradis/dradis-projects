@@ -37,15 +37,14 @@ module Dradis::Plugins::Projects::Upload
           logger.info { 'Loading XML template file...' }
           template_file = Rails.root.join('tmp', 'zip', 'dradis-repository.xml')
           importer    = Template::Importer.new(
-                          logger: logger,
-                          plugin: Dradis::Plugins::Projects::Upload::Template
+                          options.merge plugin: Dradis::Plugins::Projects::Upload::Template
                         )
-          node_lookup = importer.import(file: template_file)
+          lookup_table = importer.import(file: template_file)
           logger.info { 'Done.' }
 
 
           logger.info { 'Moving attachments to their final destinations...' }
-          node_lookup.each do |oldid,newid|
+          lookup_table[:nodes].each do |oldid,newid|
             if File.directory? Rails.root.join('tmp', 'zip', oldid)
               FileUtils.mkdir_p Attachment.pwd.join(newid.to_s)
 

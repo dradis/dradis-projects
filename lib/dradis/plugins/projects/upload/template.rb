@@ -10,7 +10,7 @@ module Dradis::Plugins::Projects::Upload
     end
 
     class Importer < Dradis::Plugins::Upload::Importer
-      attr_accessor :template_version
+      attr_accessor :lookup_table, :template_version
 
       # The import method is invoked by the framework to process a template file
       # that has just been uploaded using the 'Import from file...' dialog.
@@ -65,6 +65,8 @@ module Dradis::Plugins::Projects::Upload
         parse_methodologies(template)
         parse_tags(template)
         finalize(template)
+        # FIXME: returning this is gross
+        lookup_table
       rescue Exception => e
         logger.fatal { e.message }
         logger.fatal { e.backtrace } if Rails.env.development?

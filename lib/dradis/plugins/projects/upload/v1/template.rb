@@ -3,7 +3,7 @@ module Dradis::Plugins::Projects::Upload::V1
 
     class Importer < Dradis::Plugins::Projects::Upload::Template::Importer
 
-      attr_accessor :attachment_notes, :logger, :lookup_table, :pending_changes
+      attr_accessor :attachment_notes, :logger, :pending_changes
 
       def post_initialize(args={})
         @lookup_table = {
