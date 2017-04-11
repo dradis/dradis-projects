@@ -17,6 +17,7 @@ class ExportTasks < Thor
     logger        = Logger.new(STDOUT)
     logger.level  = Logger::DEBUG
     opts[:logger] = logger
+    opts[:project_id] = ENV['PROJECT_ID'].to_i if ENV.key?('PROJECT_ID')
 
     template_path = options.file || Rails.root.join('backup').to_s
     FileUtils.mkdir_p(template_path) unless File.exist?(template_path)
@@ -58,6 +59,7 @@ class ExportTasks < Thor
     logger        = Logger.new(STDOUT)
     logger.level  = Logger::DEBUG
     opts[:logger] = logger
+    opts[:project_id] = ENV['PROJECT_ID'].to_i if ENV.key?('PROJECT_ID')
 
     package_path  = options.file || Rails.root.join('backup')
     FileUtils.mkdir_p(package_path) unless File.exist?(package_path)
