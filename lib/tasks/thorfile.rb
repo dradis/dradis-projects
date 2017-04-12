@@ -101,15 +101,10 @@ class UploadTasks < Thor
 
     detect_and_set_project_scope
 
-    content_service  = Dradis::Plugins::ContentService.new(plugin: Dradis::Plugins::Projects::Upload::Template)
-    template_service = Dradis::Plugins::TemplateService.new(plugin: Dradis::Plugins::Projects::Upload::Template)
+    opts = {logger: logger, plugin: Dradis::Plugins::Projects::Upload::Template}
+    opts.merge!(project_id: ENV['PROJECT_ID'].to_i) if ENV.key?('PROJECT_ID')
 
-    importer = Dradis::Plugins::Projects::Upload::Template::Importer.new(
-      logger:           logger,
-      content_service:  content_service,
-      template_service: template_service
-    )
-
+    importer = Dradis::Plugins::Projects::Upload::Template::Importer.new(opts)
     importer.import(file: file_path)
 
     logger.close
@@ -134,11 +129,9 @@ class UploadTasks < Thor
     detect_and_set_project_scope
 
     opts = {logger: logger, plugin: Dradis::Plugins::Projects::Upload::Package}
-
     opts.merge!(project_id: ENV['PROJECT_ID'].to_i) if ENV.key?('PROJECT_ID')
 
     importer = Dradis::Plugins::Projects::Upload::Package::Importer.new(opts)
-
     importer.import(file: file_path)
 
     logger.close
