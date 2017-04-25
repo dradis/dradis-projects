@@ -17,17 +17,19 @@ class ExportTasks < Thor
     logger        = Logger.new(STDOUT)
     logger.level  = Logger::DEBUG
     opts[:logger] = logger
+    opts[:project_id] = ENV['PROJECT_ID'].to_i if ENV.key?('PROJECT_ID')
 
     template_path = options.file || Rails.root.join('backup').to_s
     FileUtils.mkdir_p(template_path) unless File.exist?(template_path)
 
     unless template_path =~ /\.xml\z/
       date          = DateTime.now.strftime("%Y-%m-%d")
-      sequence      = Dir.glob(File.join(template_path, "dradis-template_#{date}_*.xml")).collect do |a|
+      project       = opts[:project_id].nil? ? "" : "_project-#{opts[:project_id]}"
+      sequence      = Dir.glob(File.join(template_path, "dradis-template#{project}_#{date}_*.xml")).collect do |a|
                         a.match(/_([0-9]+)\.xml\z/)[1].to_i
                       end.max || 0
 
-      template_path = File.join(template_path, "dradis-template_#{date}_#{sequence + 1}.xml")
+      template_path = File.join(template_path, "dradis-template#{project}_#{date}_#{sequence + 1}.xml")
     end
 
     detect_and_set_project_scope
@@ -47,7 +49,7 @@ class ExportTasks < Thor
   long_desc "Creates a copy of the current repository, including all nodes, notes and " +
             "attachments as a zipped archive. The backup can be imported into another " +
             "dradis instance using the 'Project Package Upload' option."
-  method_option   :file, type: :string, desc: "the package file to create, or directory to create it in"
+  method_option   :path, type: :string, desc: "the directory to create the package file in"
   def package
     require 'config/environment'
 
@@ -58,15 +60,15 @@ class ExportTasks < Thor
     logger        = Logger.new(STDOUT)
     logger.level  = Logger::DEBUG
     opts[:logger] = logger
+    opts[:project_id] = ENV['PROJECT_ID'].to_i if ENV.key?('PROJECT_ID')
 
-    package_path  = options.file || Rails.root.join('backup')
+    package_path  = options.path || Rails.root.join('backup')
     FileUtils.mkdir_p(package_path) unless File.exist?(package_path)
 
-    unless package_path.to_s =~ /\.zip\z/
-      date      = DateTime.now.strftime("%Y-%m-%d")
-      sequence  = Dir.glob(File.join(package_path, "dradis-export_#{date}_*.zip")).collect { |a| a.match(/_([0-9]+)\.zip\z/)[1].to_i }.max || 0
-      package_path = File.join(package_path, "dradis-export_#{date}_#{sequence + 1}.zip")
-    end
+    date      = DateTime.now.strftime("%Y-%m-%d")
+    project   = opts[:project_id].nil? ? "" : "_project-#{opts[:project_id]}"
+    sequence  = Dir.glob(File.join(package_path, "dradis-export#{project}_#{date}_*.zip")).collect { |a| a.match(/_([0-9]+)\.zip\z/)[1].to_i }.max || 0
+    package_path = File.join(package_path, "dradis-export#{project}_#{date}_#{sequence + 1}.zip")
 
     detect_and_set_project_scope
 
@@ -75,7 +77,7 @@ class ExportTasks < Thor
       export(filename: package_path)
 
     logger.info{ "Project package created at:\n\t#{ File.expand_path( package_path ) }" }
-    logger.close
+    # logger.close # commented, so we do not close STDOUT
   end
 
 end
