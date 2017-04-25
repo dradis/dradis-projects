@@ -24,11 +24,12 @@ class ExportTasks < Thor
 
     unless template_path =~ /\.xml\z/
       date          = DateTime.now.strftime("%Y-%m-%d")
-      sequence      = Dir.glob(File.join(template_path, "dradis-template_#{date}_*.xml")).collect do |a|
+      project       = opts[:project_id].nil? ? "" : "_project-#{opts[:project_id]}"
+      sequence      = Dir.glob(File.join(template_path, "dradis-template#{project}_#{date}_*.xml")).collect do |a|
                         a.match(/_([0-9]+)\.xml\z/)[1].to_i
                       end.max || 0
 
-      template_path = File.join(template_path, "dradis-template_#{date}_#{sequence + 1}.xml")
+      template_path = File.join(template_path, "dradis-template#{project}_#{date}_#{sequence + 1}.xml")
     end
 
     detect_and_set_project_scope
@@ -66,8 +67,9 @@ class ExportTasks < Thor
 
     unless package_path.to_s =~ /\.zip\z/
       date      = DateTime.now.strftime("%Y-%m-%d")
-      sequence  = Dir.glob(File.join(package_path, "dradis-export_#{date}_*.zip")).collect { |a| a.match(/_([0-9]+)\.zip\z/)[1].to_i }.max || 0
-      package_path = File.join(package_path, "dradis-export_#{date}_#{sequence + 1}.zip")
+      project   = opts[:project_id].nil? ? "" : "_project-#{opts[:project_id]}"
+      sequence  = Dir.glob(File.join(package_path, "dradis-export#{project}_#{date}_*.zip")).collect { |a| a.match(/_([0-9]+)\.zip\z/)[1].to_i }.max || 0
+      package_path = File.join(package_path, "dradis-export#{project}_#{date}_#{sequence + 1}.zip")
     end
 
     detect_and_set_project_scope
@@ -77,7 +79,7 @@ class ExportTasks < Thor
       export(filename: package_path)
 
     logger.info{ "Project package created at:\n\t#{ File.expand_path( package_path ) }" }
-    logger.close
+    # logger.close # commented, so we do not close STDOUT
   end
 
 end
