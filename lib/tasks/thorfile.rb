@@ -49,7 +49,7 @@ class ExportTasks < Thor
   long_desc "Creates a copy of the current repository, including all nodes, notes and " +
             "attachments as a zipped archive. The backup can be imported into another " +
             "dradis instance using the 'Project Package Upload' option."
-  method_option   :file, type: :string, desc: "the package file to create, or directory to create it in"
+  method_option   :path, type: :string, desc: "the directory to create the package file in"
   def package
     require 'config/environment'
 
@@ -62,15 +62,13 @@ class ExportTasks < Thor
     opts[:logger] = logger
     opts[:project_id] = ENV['PROJECT_ID'].to_i if ENV.key?('PROJECT_ID')
 
-    package_path  = options.file || Rails.root.join('backup')
+    package_path  = options.path || Rails.root.join('backup')
     FileUtils.mkdir_p(package_path) unless File.exist?(package_path)
 
-    unless package_path.to_s =~ /\.zip\z/
-      date      = DateTime.now.strftime("%Y-%m-%d")
-      project   = opts[:project_id].nil? ? "" : "_project-#{opts[:project_id]}"
-      sequence  = Dir.glob(File.join(package_path, "dradis-export#{project}_#{date}_*.zip")).collect { |a| a.match(/_([0-9]+)\.zip\z/)[1].to_i }.max || 0
-      package_path = File.join(package_path, "dradis-export#{project}_#{date}_#{sequence + 1}.zip")
-    end
+    date      = DateTime.now.strftime("%Y-%m-%d")
+    project   = opts[:project_id].nil? ? "" : "_project-#{opts[:project_id]}"
+    sequence  = Dir.glob(File.join(package_path, "dradis-export#{project}_#{date}_*.zip")).collect { |a| a.match(/_([0-9]+)\.zip\z/)[1].to_i }.max || 0
+    package_path = File.join(package_path, "dradis-export#{project}_#{date}_#{sequence + 1}.zip")
 
     detect_and_set_project_scope
 
