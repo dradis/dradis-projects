@@ -41,7 +41,7 @@ module Dradis::Plugins::Projects::Export::V1
             evidence_builder.author(evidence.author)
             evidence_builder.tag!('issue-id', evidence.issue_id)
             evidence_builder.content do
-              evidence_builder.cdata!(evidence.content)
+              evidence_builder.cdata!(evidence.content || "")
             end
             build_activities_for(evidence_builder, evidence)
           end
