@@ -22,6 +22,9 @@ module Dradis::Plugins::Projects::Export
     def build_nodes(builder);         raise NotImplementedError; end
     def build_tags(builder);          raise NotImplementedError; end
     def version;                      raise NotImplementedError; end
+    def cdata!(builder, text)
+      builder.cdata! text.gsub(/[\u0001-\u0008\u000B\u000C\u000D-\u001F]/ , '')
+    end
   end
 end
 
