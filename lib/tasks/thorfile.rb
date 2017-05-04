@@ -10,9 +10,7 @@ class ExportTasks < Thor
   def template
     require 'config/environment'
 
-    STDOUT.sync   = true
-    logger        = Logger.new(STDOUT)
-    logger.level  = Logger::DEBUG
+    logger = default_logger
     task_options[:logger] = logger
 
     template_path = options.file || Rails.root.join('backup').to_s
@@ -48,9 +46,7 @@ class ExportTasks < Thor
   def package
     require 'config/environment'
 
-    STDOUT.sync   = true
-    logger        = Logger.new(STDOUT)
-    logger.level  = Logger::DEBUG
+    logger = default_logger
     task_options[:logger] = logger
 
     package_path  = options.file || Rails.root.join('backup')
@@ -72,6 +68,13 @@ class ExportTasks < Thor
     logger.close
   end
 
+  private
+  def default_logger
+    STDOUT.sync   = true
+    logger        = Logger.new(STDOUT)
+    logger.level  = Logger::DEBUG
+    logger
+  end
 end
 
 class UploadTasks < Thor
