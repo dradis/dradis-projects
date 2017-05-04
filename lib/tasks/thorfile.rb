@@ -93,6 +93,7 @@ class UploadTasks < Thor
 
     logger = Logger.new(STDOUT)
     logger.level = Logger::DEBUG
+    task_options[:logger] = logger
 
     unless File.exists?(file_path)
       $stderr.puts "** the file [#{file_path}] does not exist"
@@ -101,10 +102,9 @@ class UploadTasks < Thor
 
     detect_and_set_project_scope
 
-    opts = {logger: logger, plugin: Dradis::Plugins::Projects::Upload::Template}
-    opts.merge!(project_id: ENV['PROJECT_ID'].to_i) if ENV.key?('PROJECT_ID')
+    task_options.merge!(plugin: Dradis::Plugins::Projects::Upload::Template)
 
-    importer = Dradis::Plugins::Projects::Upload::Template::Importer.new(opts)
+    importer = Dradis::Plugins::Projects::Upload::Template::Importer.new(task_options)
     importer.import(file: file_path)
 
     logger.close
@@ -120,6 +120,7 @@ class UploadTasks < Thor
 
     logger = Logger.new(STDOUT)
     logger.level = Logger::DEBUG
+    task_options[:logger] = logger
 
     unless File.exists?(file_path)
       $stderr.puts "** the file [#{file_path}] does not exist"
@@ -128,10 +129,9 @@ class UploadTasks < Thor
 
     detect_and_set_project_scope
 
-    opts = {logger: logger, plugin: Dradis::Plugins::Projects::Upload::Package}
-    opts.merge!(project_id: ENV['PROJECT_ID'].to_i) if ENV.key?('PROJECT_ID')
+    task_options.merge!(plugin: Dradis::Plugins::Projects::Upload::Package)
 
-    importer = Dradis::Plugins::Projects::Upload::Package::Importer.new(opts)
+    importer = Dradis::Plugins::Projects::Upload::Package::Importer.new(task_options)
     importer.import(file: file_path)
 
     logger.close
