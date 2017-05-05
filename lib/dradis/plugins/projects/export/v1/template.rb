@@ -41,7 +41,7 @@ module Dradis::Plugins::Projects::Export::V1
             evidence_builder.author(evidence.author)
             evidence_builder.tag!('issue-id', evidence.issue_id)
             evidence_builder.content do
-              evidence_builder.cdata!(evidence.content)
+              cdata!(evidence_builder, evidence.content)
             end
             build_activities_for(evidence_builder, evidence)
           end
@@ -58,7 +58,7 @@ module Dradis::Plugins::Projects::Export::V1
             issue_builder.id(issue.id)
             issue_builder.author(issue.author)
             issue_builder.text do
-              issue_builder.cdata!(issue.text)
+              cdata!(issue_builder, issue.text)
             end
             build_activities_for(issue_builder, issue)
           end
@@ -72,7 +72,7 @@ module Dradis::Plugins::Projects::Export::V1
         methodologies.each do |methodology|
           methodologies_builder.methodology do |methodology_builder|
             methodology_builder.text do
-              methodology_builder.cdata!(methodology.text)
+              cdata!(methodology_builder, methodology.text)
             end
           end
         end
@@ -93,7 +93,7 @@ module Dradis::Plugins::Projects::Export::V1
             node_builder.tag!('parent-id', node.parent_id)
             node_builder.position(node.position)
             node_builder.properties do
-              node_builder.cdata!(node.raw_properties)
+              cdata!(node_builder, node.raw_properties)
             end
             node_builder.tag!('type-id', node.type_id)
             # Notes
@@ -114,7 +114,7 @@ module Dradis::Plugins::Projects::Export::V1
             note_builder.author(note.author)
             note_builder.tag!('category-id', note.category_id)
             note_builder.text do
-              note_builder.cdata!(note.text)
+              cdata!(note_builder, note.text)
             end
             build_activities_for(note_builder, note)
           end
