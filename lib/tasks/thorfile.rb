@@ -91,10 +91,6 @@ class UploadTasks < Thor
   def template(file_path)
     require 'config/environment'
 
-    logger = Logger.new(STDOUT)
-    logger.level = Logger::DEBUG
-    task_options[:logger] = logger
-
     unless File.exists?(file_path)
       $stderr.puts "** the file [#{file_path}] does not exist"
       exit -1
@@ -117,10 +113,6 @@ class UploadTasks < Thor
   desc "package FILE", "import an entire repository package"
   def package(file_path)
     require 'config/environment'
-
-    logger = Logger.new(STDOUT)
-    logger.level = Logger::DEBUG
-    task_options[:logger] = logger
 
     unless File.exists?(file_path)
       $stderr.puts "** the file [#{file_path}] does not exist"
