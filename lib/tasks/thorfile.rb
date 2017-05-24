@@ -74,9 +74,6 @@ class UploadTasks < Thor
   def template(file_path)
     require 'config/environment'
 
-    logger = Logger.new(STDOUT)
-    logger.level = Logger::DEBUG
-
     unless File.exists?(file_path)
       $stderr.puts "** the file [#{file_path}] does not exist"
       exit -1
@@ -84,15 +81,9 @@ class UploadTasks < Thor
 
     detect_and_set_project_scope
 
-    content_service  = Dradis::Plugins::ContentService.new(plugin: Dradis::Plugins::Projects::Upload::Template)
-    template_service = Dradis::Plugins::TemplateService.new(plugin: Dradis::Plugins::Projects::Upload::Template)
+    task_options.merge!(plugin: Dradis::Plugins::Projects::Upload::Template)
 
-    importer = Dradis::Plugins::Projects::Upload::Template::Importer.new(
-      logger:           logger,
-      content_service:  content_service,
-      template_service: template_service
-    )
-
+    importer = Dradis::Plugins::Projects::Upload::Template::Importer.new(task_options)
     importer.import(file: file_path)
 
     logger.close
@@ -106,26 +97,16 @@ class UploadTasks < Thor
   def package(file_path)
     require 'config/environment'
 
-    logger = Logger.new(STDOUT)
-    logger.level = Logger::DEBUG
-
     unless File.exists?(file_path)
       $stderr.puts "** the file [#{file_path}] does not exist"
       exit -1
     end
 
-
     detect_and_set_project_scope
 
-    content_service  = Dradis::Plugins::ContentService.new(plugin: Dradis::Plugins::Projects::Upload::Package)
-    template_service = Dradis::Plugins::TemplateService.new(plugin: Dradis::Plugins::Projects::Upload::Package)
+    task_options.merge!(plugin: Dradis::Plugins::Projects::Upload::Package)
 
-    importer = Dradis::Plugins::Projects::Upload::Package::Importer.new(
-                logger: logger,
-       content_service: content_service,
-      template_service: template_service
-    )
-
+    importer = Dradis::Plugins::Projects::Upload::Package::Importer.new(task_options)
     importer.import(file: file_path)
 
     logger.close
