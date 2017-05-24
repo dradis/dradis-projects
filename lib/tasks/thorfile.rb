@@ -10,14 +10,6 @@ class ExportTasks < Thor
   def template
     require 'config/environment'
 
-    # The options we'll end up passing to the Processor class
-    opts = {}
-
-    STDOUT.sync   = true
-    logger        = Logger.new(STDOUT)
-    logger.level  = Logger::DEBUG
-    opts[:logger] = logger
-
     template_path = options.file || Rails.root.join('backup').to_s
     FileUtils.mkdir_p(template_path) unless File.exist?(template_path)
 
@@ -33,7 +25,7 @@ class ExportTasks < Thor
     detect_and_set_project_scope
 
     exporter_class = Rails.application.config.dradis.projects.template_exporter
-    export_options = opts.merge(plugin: Dradis::Plugins::Projects)
+    export_options = task_options.merge(plugin: Dradis::Plugins::Projects)
     exporter       = exporter_class.new(export_options)
 
     File.open(template_path, 'w') { |f| f.write exporter.export() }
@@ -51,14 +43,6 @@ class ExportTasks < Thor
   def package
     require 'config/environment'
 
-    # The options we'll end up passing to the Processor class
-    opts = {}
-
-    STDOUT.sync   = true
-    logger        = Logger.new(STDOUT)
-    logger.level  = Logger::DEBUG
-    opts[:logger] = logger
-
     package_path  = options.file || Rails.root.join('backup')
     FileUtils.mkdir_p(package_path) unless File.exist?(package_path)
 
@@ -70,14 +54,13 @@ class ExportTasks < Thor
 
     detect_and_set_project_scope
 
-    export_options = opts.merge(plugin: Dradis::Plugins::Projects)
+    export_options = task_options.merge(plugin: Dradis::Plugins::Projects)
     Dradis::Plugins::Projects::Export::Package.new(export_options).
       export(filename: package_path)
 
     logger.info{ "Project package created at:\n\t#{ File.expand_path( package_path ) }" }
     logger.close
   end
-
 end
 
 class UploadTasks < Thor
