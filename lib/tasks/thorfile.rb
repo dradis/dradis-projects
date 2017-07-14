@@ -31,7 +31,6 @@ class ExportTasks < Thor
     File.open(template_path, 'w') { |f| f.write exporter.export() }
 
     logger.info { "Template file created at:\n\t#{ File.expand_path( template_path ) }" }
-    logger.close
   end
 
 
@@ -59,7 +58,6 @@ class ExportTasks < Thor
       export(filename: package_path)
 
     logger.info{ "Project package created at:\n\t#{ File.expand_path( package_path ) }" }
-    logger.close
   end
 end
 
@@ -85,8 +83,6 @@ class UploadTasks < Thor
 
     importer = Dradis::Plugins::Projects::Upload::Template::Importer.new(task_options)
     importer.import(file: file_path)
-
-    logger.close
   end
 
 
@@ -108,8 +104,6 @@ class UploadTasks < Thor
 
     importer = Dradis::Plugins::Projects::Upload::Package::Importer.new(task_options)
     importer.import(file: file_path)
-
-    logger.close
   end
 
 end
