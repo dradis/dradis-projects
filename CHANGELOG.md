@@ -1,7 +1,6 @@
 ## Dradis Framework 3.7 (July, 2017) ##
 
-* No changes.
-
+*   Skip closing the logger in thorfile   
 
 ## Dradis Framework 3.6 (March XX, 2017) ##
 
@@ -12,4 +11,3 @@
 *   Make the project template exporter / uploader configurable.
 
 *   Break down the #export and #parse methods into smaller tasks.
-
