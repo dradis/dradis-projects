@@ -249,7 +249,6 @@ module Dradis::Plugins::Projects::Upload::V1
       end
 
       def parse_nodes(template)
-
         logger.info { 'Processing Nodes...' }
 
         # Re generate the Node tree structure
@@ -329,8 +328,26 @@ module Dradis::Plugins::Projects::Upload::V1
         end
       end
 
-      def parse_tags(template)
+      def parse_report_content(template)
+        logger.info { 'Processing Report Content...' }
 
+        content_library_xml =
+          template.xpath("//nodes/node").first do |xml_nodes|
+            xml_node.at_xpath('type-id').text == Node::Types::CONTENTLIB.to_s
+          end
+
+        document_properties =
+          JSON.parse(content_library_xml.at_xpath('properties').text)
+
+        content_library = Node.content_library
+        content_library.properties =
+          content_library.properties.merge(document_properties)
+        content_library.save
+
+        logger.info { 'Done.' }
+      end
+
+      def parse_tags(template)
         logger.info { 'Processing Tags...' }
 
         template.xpath('dradis-template/tags/tag').each do |xml_tag|
