@@ -63,6 +63,7 @@ module Dradis::Plugins::Projects::Upload
         parse_nodes(template)
         parse_issues(template)
         parse_methodologies(template)
+        parse_report_content(template)
         parse_tags(template)
         finalize(template)
         # FIXME: returning this is gross
