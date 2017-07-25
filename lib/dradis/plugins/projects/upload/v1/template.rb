@@ -336,13 +336,15 @@ module Dradis::Plugins::Projects::Upload::V1
             xml_node.at_xpath('type-id').text == Node::Types::CONTENTLIB.to_s
           end
 
-        document_properties =
-          JSON.parse(content_library_xml.at_xpath('properties').text)
+        if content_library_xml != nil
+          document_properties =
+            JSON.parse(content_library_xml.at_xpath('properties').text)
 
-        content_library = Node.content_library
-        content_library.properties =
-          content_library.properties.merge(document_properties)
-        content_library.save
+          content_library = Node.content_library
+          content_library.properties =
+            content_library.properties.merge(document_properties)
+          content_library.save
+        end
 
         logger.info { 'Done.' }
       end
