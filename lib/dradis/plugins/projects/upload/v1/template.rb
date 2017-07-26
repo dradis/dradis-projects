@@ -335,9 +335,9 @@ module Dradis::Plugins::Projects::Upload::V1
           template.at_xpath(
             "//nodes/node/type-id[text()='#{Node::Types::CONTENTLIB}']"
           )
-        content_library_xml = contentlib_type_id.parent if contentlib_type_id
 
-        if content_library_xml != nil
+        if contentlib_type_id
+          content_library_xml = contentlib_type_id.parent
           document_properties =
             JSON.parse(content_library_xml.at_xpath('properties').text)
 
