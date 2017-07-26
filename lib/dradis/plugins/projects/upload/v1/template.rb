@@ -331,10 +331,11 @@ module Dradis::Plugins::Projects::Upload::V1
       def parse_report_content(template)
         logger.info { 'Processing Report Content...' }
 
-        content_library_xml =
-          template.xpath("//nodes/node").first do |xml_nodes|
-            xml_node.at_xpath('type-id').text == Node::Types::CONTENTLIB.to_s
-          end
+        contentlib_type_id =
+          template.at_xpath(
+            "//nodes/node/type-id[text()='#{Node::Types::CONTENTLIB}']"
+          )
+        content_library_xml = contentlib_type_id.parent if contentlib_type_id
 
         if content_library_xml != nil
           document_properties =
