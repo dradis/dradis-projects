@@ -70,7 +70,7 @@ module Dradis::Plugins::Projects::Export::V1
       methodologies = Node.methodology_library.notes
       builder.methodologies do |methodologies_builder|
         methodologies.each do |methodology|
-          methodologies_builder.methodology do |methodology_builder|
+          methodologies_builder.methodology(version: VERSION) do |methodology_builder|
             methodology_builder.text do
               methodology_builder.cdata!(methodology.text)
             end

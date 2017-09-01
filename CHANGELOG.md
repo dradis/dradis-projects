@@ -1,3 +1,7 @@
+## Dradis Framework 3.8 (XXX, 2017) ##
+
+*   Add version attribute to exported methodologies   
+
 ## Dradis Framework 3.7 (July, 2017) ##
 
 *   Skip closing the logger in thorfile   
