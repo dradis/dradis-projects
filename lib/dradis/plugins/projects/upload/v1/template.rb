@@ -199,7 +199,7 @@ module Dradis::Plugins::Projects::Upload::V1
         type_id   = element.text.nil? ? nil : element.text.strip
         label     = xml_node.at_xpath('label').text.strip
         element   = xml_node.at_xpath('parent-id')
-        parent_id = element.text.nil? ? nil : element.text.strip
+        parent_id = element.text.blank? ? nil : element.text.strip
 
         # Node positions
         element  = xml_node.at_xpath('position')
@@ -224,22 +224,28 @@ module Dradis::Plugins::Projects::Upload::V1
           node = Node.create_with(type_id: type_id, parent_id: parent_id).
                   find_or_create_by!(label: label)
         else
-          node = Node.create!(
-                   type_id:   type_id,
-                   label:     label,
-                   parent_id: parent_id,
-                   position:  position
-                 )
+          # We don't want to validate child nodes here yet since they always
+          # have invalid parent id's. They'll eventually be validated in the
+          # finalize_nodes method.
+          has_nil_parent = !parent_id
+          node =
+            Node.new(
+              type_id:   type_id,
+              label:     label,
+              parent_id: parent_id,
+              position:  position
+            )
+          node.save!(validate: has_nil_parent)
         end
 
         if properties
           node.raw_properties = properties
+          node.save!(validate: has_nil_parent)
         end
 
         node.update_attribute(:created_at, created_at.text.strip) if created_at
         node.update_attribute(:updated_at, updated_at.text.strip) if updated_at
 
-        raise "Couldn't save Node" unless validate_and_save(node)
         raise "Couldn't create activities for Node ##{node.id}" unless create_activities(node, xml_node)
 
         parse_node_notes(node, xml_node)
