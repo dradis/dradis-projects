@@ -329,6 +329,8 @@ module Dradis::Plugins::Projects::Upload::V1
       end
 
       def parse_report_content(template)
+        return unless defined?(Node::Types::CONTENTLIB)
+
         logger.info { 'Processing Report Content...' }
 
         contentlib_type_id =
