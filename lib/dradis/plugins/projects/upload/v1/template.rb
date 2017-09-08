@@ -331,6 +331,17 @@ module Dradis::Plugins::Projects::Upload::V1
       def parse_report_content(template)
         logger.info { 'Processing Report Content...' }
 
+        parse_document_properties(template)
+        parse_content_blocks(template)
+
+        logger.info { 'Done.' }
+      end
+
+      def parse_document_properties(template)
+        return unless defined?(Node::Types::CONTENTLIB)
+
+        logger.info { 'Processing document properties...' }
+
         contentlib_type_id =
           template.at_xpath(
             "//nodes/node/type-id[text()='#{Node::Types::CONTENTLIB}']"
@@ -347,7 +358,26 @@ module Dradis::Plugins::Projects::Upload::V1
           content_library.save
         end
 
-        logger.info { 'Done.' }
+        logger.info { 'Done processing document properties.' }
+      end
+
+      def parse_content_blocks(template)
+        return unless defined?(ContentBlock)
+
+        logger.info { 'Processing content blocks...' }
+
+        template.xpath('//content_blocks/content_block').each do |xml_block|
+          block_attributes = {
+            author: xml_block.at_xpath('author').text.strip,
+            kind: xml_block.at_xpath('kind').text,
+            text: xml_block.at_xpath('text').text,
+          }
+
+          block = ContentBlock.new(block_attributes)
+          block.save
+        end
+
+        logger.info { 'Done processing content blocks.' }
       end
 
       def parse_tags(template)
