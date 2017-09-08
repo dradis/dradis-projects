@@ -122,6 +122,22 @@ module Dradis::Plugins::Projects::Export::V1
       end
     end
 
+    def build_content_blocks(builder)
+      return unless defined?(ContentBlock)
+
+      content_blocks = ContentBlock.all
+      builder.content_blocks do |blocks_builder|
+        content_blocks.each do |block|
+          blocks_builder.content_block do |block_builder|
+            block_builder.id(block.id)
+            block_builder.author(block.author)
+            block_builder.kind(block.kind)
+            block_builder.text(block.text)
+          end
+        end
+      end
+    end
+
     def build_tags(builder)
       tags = Tag.all
       builder.tags do |tags_builder|

@@ -9,6 +9,7 @@ module Dradis::Plugins::Projects::Export
         build_nodes(template_builder)
         build_issues(template_builder)
         build_methodologies(template_builder)
+        build_content_blocks(template_builder)
         build_categories(template_builder)
         build_tags(template_builder)
       end
@@ -20,6 +21,7 @@ module Dradis::Plugins::Projects::Export
     def build_issues(builder);        raise NotImplementedError; end
     def build_methodologies(builder); raise NotImplementedError; end
     def build_nodes(builder);         raise NotImplementedError; end
+    def build_content_blocks(builder);raise NotImplementedError; end
     def build_tags(builder);          raise NotImplementedError; end
     def version;                      raise NotImplementedError; end
   end
