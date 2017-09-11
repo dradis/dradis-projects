@@ -131,8 +131,8 @@ module Dradis::Plugins::Projects::Export::V1
           blocks_builder.content_block do |block_builder|
             block_builder.id(block.id)
             block_builder.author(block.author)
-            block_builder.kind(block.kind)
-            block_builder.text(block.text)
+            block_builder.name(block.name)
+            block_builder.content(block.content)
           end
         end
       end
