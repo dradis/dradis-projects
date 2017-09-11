@@ -367,10 +367,12 @@ module Dradis::Plugins::Projects::Upload::V1
         logger.info { 'Processing content blocks...' }
 
         template.xpath('//content_blocks/content_block').each do |xml_block|
+          user_id = user_id_for_email(xml_block.at_xpath('author').text.strip)
+
           block_attributes = {
-            author: xml_block.at_xpath('author').text.strip,
-            kind: xml_block.at_xpath('kind').text,
-            text: xml_block.at_xpath('text').text,
+            user_id: user_id == -1 ? nil : user_id,
+            name: xml_block.at_xpath('name').text,
+            content: xml_block.at_xpath('content').text,
           }
 
           block = ContentBlock.new(block_attributes)
