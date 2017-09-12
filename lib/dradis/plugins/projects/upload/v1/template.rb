@@ -375,7 +375,7 @@ module Dradis::Plugins::Projects::Upload::V1
             content: xml_block.at_xpath('content').text,
           }
 
-          block = ContentBlock.new(block_attributes)
+          block = @project.content_blocks.build(block_attributes)
           block.save
         end
 
