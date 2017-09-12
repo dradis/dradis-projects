@@ -123,14 +123,14 @@ module Dradis::Plugins::Projects::Export::V1
     end
 
     def build_content_blocks(builder)
-      return unless defined?(ContentBlock)
+      return unless @project
+      content_blocks = @project.content_blocks
 
-      content_blocks = ContentBlock.all
       builder.content_blocks do |blocks_builder|
         content_blocks.each do |block|
           blocks_builder.content_block do |block_builder|
             block_builder.id(block.id)
-            block_builder.author(block.author.email)
+            block_builder.author(block.author.try(:email))
             block_builder.name(block.name)
             block_builder.content(block.content)
           end
