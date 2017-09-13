@@ -132,7 +132,9 @@ module Dradis::Plugins::Projects::Export::V1
             block_builder.id(block.id)
             block_builder.author(block.author.try(:email))
             block_builder.name(block.name)
-            block_builder.content(block.content)
+            block_builder.content do
+              block_builder.cdata!(block.content)
+            end
           end
         end
       end
