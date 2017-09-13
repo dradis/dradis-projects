@@ -2,6 +2,8 @@
 
 *   Add version attribute to exported methodologies   
 
+*   Import content block data
+
 ## Dradis Framework 3.7 (July, 2017) ##
 
 *   Skip closing the logger in thorfile   

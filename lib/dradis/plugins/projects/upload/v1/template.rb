@@ -362,7 +362,7 @@ module Dradis::Plugins::Projects::Upload::V1
       end
 
       def parse_content_blocks(template)
-        return unless defined?(ContentBlock)
+        return unless @project
 
         logger.info { 'Processing content blocks...' }
 
