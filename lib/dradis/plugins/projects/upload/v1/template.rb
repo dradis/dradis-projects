@@ -370,7 +370,7 @@ module Dradis::Plugins::Projects::Upload::V1
           user_id = user_id_for_email(xml_block.at_xpath('author').text.strip)
 
           block_attributes = {
-            user_id: user_id == -1 ? nil : user_id,
+            user_id: user_id == -1 ? @default_user_id : user_id,
             name: xml_block.at_xpath('name').text,
             content: xml_block.at_xpath('content').text,
           }
