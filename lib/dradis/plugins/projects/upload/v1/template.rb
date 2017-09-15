@@ -328,60 +328,6 @@ module Dradis::Plugins::Projects::Upload::V1
         end
       end
 
-      def parse_report_content(template)
-        logger.info { 'Processing Report Content...' }
-
-        parse_document_properties(template)
-        parse_content_blocks(template)
-
-        logger.info { 'Done.' }
-      end
-
-      def parse_document_properties(template)
-        return unless defined?(Node::Types::CONTENTLIB)
-
-        logger.info { 'Processing document properties...' }
-
-        contentlib_type_id =
-          template.at_xpath(
-            "//nodes/node/type-id[text()='#{Node::Types::CONTENTLIB}']"
-          )
-
-        if contentlib_type_id
-          content_library_xml = contentlib_type_id.parent
-          document_properties =
-            JSON.parse(content_library_xml.at_xpath('properties').text)
-
-          content_library = Node.content_library
-          content_library.properties =
-            content_library.properties.merge(document_properties)
-          content_library.save
-        end
-
-        logger.info { 'Done processing document properties.' }
-      end
-
-      def parse_content_blocks(template)
-        return unless @project
-
-        logger.info { 'Processing content blocks...' }
-
-        template.xpath('//content_blocks/content_block').each do |xml_block|
-          user_id = user_id_for_email(xml_block.at_xpath('author').text.strip)
-
-          block_attributes = {
-            user_id: user_id == -1 ? @default_user_id : user_id,
-            name: xml_block.at_xpath('name').text,
-            content: xml_block.at_xpath('content').text,
-          }
-
-          block = @project.content_blocks.build(block_attributes)
-          block.save
-        end
-
-        logger.info { 'Done processing content blocks.' }
-      end
-
       def parse_tags(template)
         logger.info { 'Processing Tags...' }
 
