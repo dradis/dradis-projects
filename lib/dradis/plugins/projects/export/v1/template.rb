@@ -122,24 +122,6 @@ module Dradis::Plugins::Projects::Export::V1
       end
     end
 
-    def build_content_blocks(builder)
-      return unless @project
-      content_blocks = @project.content_blocks
-
-      builder.content_blocks do |blocks_builder|
-        content_blocks.each do |block|
-          blocks_builder.content_block do |block_builder|
-            block_builder.id(block.id)
-            block_builder.author(block.author.try(:email))
-            block_builder.name(block.name)
-            block_builder.content do
-              block_builder.cdata!(block.content)
-            end
-          end
-        end
-      end
-    end
-
     def build_tags(builder)
       tags = Tag.all
       builder.tags do |tags_builder|

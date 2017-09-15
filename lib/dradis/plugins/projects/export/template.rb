@@ -21,7 +21,9 @@ module Dradis::Plugins::Projects::Export
     def build_issues(builder);        raise NotImplementedError; end
     def build_methodologies(builder); raise NotImplementedError; end
     def build_nodes(builder);         raise NotImplementedError; end
-    def build_content_blocks(builder);raise NotImplementedError; end
+    def build_content_blocks(builder)
+      raise NotImplementedError if version > 1
+    end
     def build_tags(builder);          raise NotImplementedError; end
     def version;                      raise NotImplementedError; end
   end
