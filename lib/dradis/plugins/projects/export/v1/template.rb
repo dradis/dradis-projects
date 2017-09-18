@@ -33,8 +33,6 @@ module Dradis::Plugins::Projects::Export::V1
       end
     end
 
-    def build_content_blocks(builder); end
-
     def build_evidence_for_node(builder, node)
       builder.evidence do |evidences_builder|
         node.evidence.each do |evidence|
@@ -123,6 +121,8 @@ module Dradis::Plugins::Projects::Export::V1
         end
       end
     end
+
+    def build_report_content(builder); end
 
     def build_tags(builder)
       tags = Tag.all
