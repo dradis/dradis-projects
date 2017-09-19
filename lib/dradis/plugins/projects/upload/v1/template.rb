@@ -197,6 +197,8 @@ module Dradis::Plugins::Projects::Upload::V1
       def parse_node(xml_node)
         element   = xml_node.at_xpath('type-id')
         type_id   = element.text.nil? ? nil : element.text.strip
+        return false if type_id == "4"
+
         label     = xml_node.at_xpath('label').text.strip
         element   = xml_node.at_xpath('parent-id')
         parent_id = element.text.nil? ? nil : element.text.strip
@@ -255,6 +257,8 @@ module Dradis::Plugins::Projects::Upload::V1
         template.xpath('dradis-template/nodes/node').each do |xml_node|
 
           node = parse_node(xml_node)
+
+          next unless node
 
           # keep track of reassigned ids
           lookup_table[:nodes][xml_node.at_xpath('id').text.strip] = node.id
