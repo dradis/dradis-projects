@@ -328,27 +328,7 @@ module Dradis::Plugins::Projects::Upload::V1
         end
       end
 
-      def parse_report_content(template)
-        logger.info { 'Processing Report Content...' }
-
-        contentlib_type_id =
-          template.at_xpath(
-            "//nodes/node/type-id[text()='#{Node::Types::CONTENTLIB}']"
-          )
-
-        if contentlib_type_id
-          content_library_xml = contentlib_type_id.parent
-          document_properties =
-            JSON.parse(content_library_xml.at_xpath('properties').text)
-
-          content_library = Node.content_library
-          content_library.properties =
-            content_library.properties.merge(document_properties)
-          content_library.save
-        end
-
-        logger.info { 'Done.' }
-      end
+      def parse_report_content(template); end
 
       def parse_tags(template)
         logger.info { 'Processing Tags...' }

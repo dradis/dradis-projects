@@ -81,7 +81,7 @@ module Dradis::Plugins::Projects::Upload
       def parse_issues(template);        raise NotImplementedError; end
       def parse_methodologies(template); raise NotImplementedError; end
       def parse_nodes(template);         raise NotImplementedError; end
-      def parse_report_content(template); raise NotImplementedError; end
+      def parse_report_content(template) raise NotImplementedError; end
       def parse_tags(template);          raise NotImplementedError; end
     end
   end
