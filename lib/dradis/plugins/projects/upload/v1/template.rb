@@ -214,27 +214,27 @@ module Dradis::Plugins::Projects::Upload::V1
 
         logger.info { "New node detected: #{label}, parent_id: #{parent_id}, type_id: #{type_id}" }
 
-        # There is one exception to the rule, the Configuration.uploadsNode node,
-        # it does not make sense to have more than one of this nodes, in any
-        # given tree
-        node = nil
-        note = nil
-        evidence = nil
-        if (label == Configuration.plugin_uploads_node)
-          node = Node.create_with(type_id: type_id, parent_id: parent_id).
-                  find_or_create_by!(label: label)
-        else
-          node = Node.create!(
-                   type_id:   type_id,
-                   label:     label,
-                   parent_id: parent_id,
-                   position:  position
-                 )
-        end
+        # There are exceptions to the rule, when it does not make sense to have
+        # more than one of this nodes, in any given tree:
+        # - the Configuration.uploadsNode node (detected by its label)
+        # - any nodes with type different from DEFAULT or HOST
+        node =
+          if label == Configuration.plugin_uploads_node
+            Node.create_with(type_id: type_id, parent_id: parent_id)
+                .find_or_create_by!(label: label)
+          elsif [Node::Types::DEFAULT, Node::Types::HOST].exclude?(type_id.to_i)
+            Node.create_with(label: label)
+                .find_or_create_by!(type_id: type_id)
+          else
+            Node.create!(
+              type_id:   type_id,
+              label:     label,
+              parent_id: parent_id,
+              position:  position
+            )
+          end
 
-        if properties
-          node.raw_properties = properties
-        end
+        node.raw_properties = properties if properties
 
         node.update_attribute(:created_at, created_at.text.strip) if created_at
         node.update_attribute(:updated_at, updated_at.text.strip) if updated_at
