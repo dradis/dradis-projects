@@ -2,6 +2,8 @@
 
 *   Add version attribute to exported methodologies   
 
+*   Add parse_report_content placeholders to import/export.
+
 ## Dradis Framework 3.7 (July, 2017) ##
 
 *   Skip closing the logger in thorfile   
