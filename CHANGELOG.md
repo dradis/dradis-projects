@@ -1,10 +1,6 @@
-## Dradis Framework 3.8 (XXX, 2017) ##
+## Dradis Framework 3.8 (September, 2017) ##
 
 *   Add version attribute to exported methodologies   
-
-*   Import content block data
-
-*   Export content block data
 
 ## Dradis Framework 3.7 (July, 2017) ##
 
