@@ -222,7 +222,7 @@ module Dradis::Plugins::Projects::Upload::V1
           if label == Configuration.plugin_uploads_node
             Node.create_with(type_id: type_id, parent_id: parent_id)
                 .find_or_create_by!(label: label)
-          elsif Node.user_nodes.distinct.pluck(:type_id).exclude?(type_id.to_i)
+          elsif [Node::Types::DEFAULT, Node::Types::HOST].exclude?(type_id.to_i)
             Node.create_with(label: label)
                 .find_or_create_by!(type_id: type_id)
           else
