@@ -214,29 +214,31 @@ module Dradis::Plugins::Projects::Upload::V1
 
         logger.info { "New node detected: #{label}, parent_id: #{parent_id}, type_id: #{type_id}" }
 
-        # There is one exception to the rule, the Configuration.uploadsNode node,
-        # it does not make sense to have more than one of this nodes, in any
-        # given tree
-        node = nil
-        note = nil
-        evidence = nil
-        if (label == Configuration.plugin_uploads_node)
-          node = Node.create_with(type_id: type_id, parent_id: parent_id).
-                  find_or_create_by!(label: label)
-        else
-          # We don't want to validate child nodes here yet since they always
-          # have invalid parent id's. They'll eventually be validated in the
-          # finalize_nodes method.
-          has_nil_parent = !parent_id
-          node =
-            Node.new(
-              type_id:   type_id,
-              label:     label,
-              parent_id: parent_id,
-              position:  position
-            )
-          node.save!(validate: has_nil_parent)
-        end
+        # There are exceptions to the rule, when it does not make sense to have
+        # more than one of this nodes, in any given tree:
+        # - the Configuration.uploadsNode node (detected by its label)
+        # - any nodes with type different from DEFAULT or HOST
+        node =
+          if label == Configuration.plugin_uploads_node
+            Node.create_with(type_id: type_id, parent_id: parent_id)
+                .find_or_create_by!(label: label)
+          elsif [Node::Types::DEFAULT, Node::Types::HOST].exclude?(type_id.to_i)
+            Node.create_with(label: label)
+                .find_or_create_by!(type_id: type_id)
+          else
+            # We don't want to validate child nodes here yet since they always
+            # have invalid parent id's. They'll eventually be validated in the
+            # finalize_nodes method.
+            has_nil_parent = !parent_id
+            node =
+              Node.new(
+                type_id:   type_id,
+                label:     label,
+                parent_id: parent_id,
+                position:  position
+              )
+            node.save!(validate: has_nil_parent)
+          end
 
         if properties
           node.raw_properties = properties
@@ -334,29 +336,7 @@ module Dradis::Plugins::Projects::Upload::V1
         end
       end
 
-      def parse_report_content(template)
-        return unless defined?(Node::Types::CONTENTLIB)
-
-        logger.info { 'Processing Report Content...' }
-
-        contentlib_type_id =
-          template.at_xpath(
-            "//nodes/node/type-id[text()='#{Node::Types::CONTENTLIB}']"
-          )
-
-        if contentlib_type_id
-          content_library_xml = contentlib_type_id.parent
-          document_properties =
-            JSON.parse(content_library_xml.at_xpath('properties').text)
-
-          content_library = Node.content_library
-          content_library.properties =
-            content_library.properties.merge(document_properties)
-          content_library.save
-        end
-
-        logger.info { 'Done.' }
-      end
+      def parse_report_content(template); end
 
       def parse_tags(template)
         logger.info { 'Processing Tags...' }

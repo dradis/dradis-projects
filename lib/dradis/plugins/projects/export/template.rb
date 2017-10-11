@@ -11,17 +11,19 @@ module Dradis::Plugins::Projects::Export
         build_methodologies(template_builder)
         build_categories(template_builder)
         build_tags(template_builder)
+        build_report_content(template_builder)
       end
       return result
     end
 
     private
-    def build_categories(builder);    raise NotImplementedError; end
-    def build_issues(builder);        raise NotImplementedError; end
-    def build_methodologies(builder); raise NotImplementedError; end
-    def build_nodes(builder);         raise NotImplementedError; end
-    def build_tags(builder);          raise NotImplementedError; end
-    def version;                      raise NotImplementedError; end
+    def build_categories(builder);     raise NotImplementedError; end
+    def build_issues(builder);         raise NotImplementedError; end
+    def build_methodologies(builder);  raise NotImplementedError; end
+    def build_nodes(builder);          raise NotImplementedError; end
+    def build_tags(builder);           raise NotImplementedError; end
+    def build_report_content(builder); raise NotImplementedError; end
+    def version;                       raise NotImplementedError; end
   end
 end
 

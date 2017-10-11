@@ -122,6 +122,8 @@ module Dradis::Plugins::Projects::Export::V1
       end
     end
 
+    def build_report_content(builder); end
+
     def build_tags(builder)
       tags = Tag.all
       builder.tags do |tags_builder|

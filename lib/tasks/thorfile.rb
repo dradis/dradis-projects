@@ -79,7 +79,12 @@ class UploadTasks < Thor
 
     detect_and_set_project_scope
 
-    task_options.merge!(plugin: Dradis::Plugins::Projects::Upload::Template)
+    default_user_id = @project.owners.first.id
+
+    task_options.merge!({
+      plugin: Dradis::Plugins::Projects::Upload::Template,
+      default_user_id: default_user_id
+    })
 
     importer = Dradis::Plugins::Projects::Upload::Template::Importer.new(task_options)
     importer.import(file: file_path)
@@ -100,7 +105,12 @@ class UploadTasks < Thor
 
     detect_and_set_project_scope
 
-    task_options.merge!(plugin: Dradis::Plugins::Projects::Upload::Package)
+    default_user_id = @project.owners.first.id
+
+    task_options.merge!({
+      plugin: Dradis::Plugins::Projects::Upload::Package,
+      default_user_id: default_user_id
+    })
 
     importer = Dradis::Plugins::Projects::Upload::Package::Importer.new(task_options)
     importer.import(file: file_path)
