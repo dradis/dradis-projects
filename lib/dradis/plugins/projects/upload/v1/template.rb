@@ -266,11 +266,6 @@ module Dradis::Plugins::Projects::Upload::V1
 
           # keep track of reassigned ids
           lookup_table[:nodes][xml_node.at_xpath('id').text.strip] = node.id
-
-          if node.parent_id != nil
-            # keep track of orphaned nodes
-            pending_changes[:orphan_nodes] << node
-          end
         end
 
         logger.info { 'Done.' }
