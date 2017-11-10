@@ -58,8 +58,8 @@ module Dradis::Plugins::Projects::Upload::V1
       def finalize(template)
         logger.info { 'Wrapping up...' }
 
-        finalize_evidence()
         finalize_nodes()
+        finalize_evidence()
         finalize_attachments()
 
         logger.info { 'Done.' }
@@ -199,7 +199,7 @@ module Dradis::Plugins::Projects::Upload::V1
         type_id   = element.text.nil? ? nil : element.text.strip
         label     = xml_node.at_xpath('label').text.strip
         element   = xml_node.at_xpath('parent-id')
-        parent_id = element.text.nil? ? nil : element.text.strip
+        parent_id = element.text.blank? ? nil : element.text.strip
 
         # Node positions
         element  = xml_node.at_xpath('position')
@@ -218,28 +218,36 @@ module Dradis::Plugins::Projects::Upload::V1
         # more than one of this nodes, in any given tree:
         # - the Configuration.uploadsNode node (detected by its label)
         # - any nodes with type different from DEFAULT or HOST
-        node =
-          if label == Configuration.plugin_uploads_node
-            Node.create_with(type_id: type_id, parent_id: parent_id)
-                .find_or_create_by!(label: label)
-          elsif [Node::Types::DEFAULT, Node::Types::HOST].exclude?(type_id.to_i)
-            Node.create_with(label: label)
-                .find_or_create_by!(type_id: type_id)
-          else
-            Node.create!(
+        if label == Configuration.plugin_uploads_node
+          node = Node.create_with(type_id: type_id, parent_id: parent_id)
+              .find_or_create_by!(label: label)
+        elsif Node::Types::USER_TYPES.exclude?(type_id.to_i)
+          node = Node.create_with(label: label)
+              .find_or_create_by!(type_id: type_id)
+        else
+          # We don't want to validate child nodes here yet since they always
+          # have invalid parent id's. They'll eventually be validated in the
+          # finalize_nodes method.
+          has_nil_parent = !parent_id
+          node =
+            Node.new(
               type_id:   type_id,
               label:     label,
               parent_id: parent_id,
               position:  position
             )
-          end
+          node.save!(validate: has_nil_parent)
+          pending_changes[:orphan_nodes] << node if parent_id
+        end
 
-        node.raw_properties = properties if properties
+        if properties
+          node.raw_properties = properties
+          node.save!(validate: has_nil_parent)
+        end
 
         node.update_attribute(:created_at, created_at.text.strip) if created_at
         node.update_attribute(:updated_at, updated_at.text.strip) if updated_at
 
-        raise "Couldn't save Node" unless validate_and_save(node)
         raise "Couldn't create activities for Node ##{node.id}" unless create_activities(node, xml_node)
 
         parse_node_notes(node, xml_node)
@@ -258,11 +266,6 @@ module Dradis::Plugins::Projects::Upload::V1
 
           # keep track of reassigned ids
           lookup_table[:nodes][xml_node.at_xpath('id').text.strip] = node.id
-
-          if node.parent_id != nil
-            # keep track of orphaned nodes
-            pending_changes[:orphan_nodes] << node
-          end
         end
 
         logger.info { 'Done.' }
