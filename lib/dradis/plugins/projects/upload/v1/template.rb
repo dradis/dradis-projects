@@ -374,7 +374,7 @@ module Dradis::Plugins::Projects::Upload::V1
             hash[user.email] = user.id
           end
         end
-        @users[email] || -1
+        @users[email] || @default_user_id
       end
 
       def validate_and_save(instance)
