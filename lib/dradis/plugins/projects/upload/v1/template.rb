@@ -368,13 +368,13 @@ module Dradis::Plugins::Projects::Upload::V1
 
       # Cache users to cut down on excess SQL requests
       def user_id_for_email(email)
-        return -1 if email.blank?
+        return @default_user_id if email.blank?
         @users ||= begin
           User.select([:id, :email]).all.each_with_object({}) do |user, hash|
             hash[user.email] = user.id
           end
         end
-        @users[email] || -1
+        @users[email] || @default_user_id
       end
 
       def validate_and_save(instance)
