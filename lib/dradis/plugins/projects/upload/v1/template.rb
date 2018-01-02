@@ -67,17 +67,18 @@ module Dradis::Plugins::Projects::Upload::V1
 
       def finalize_attachments
         # Adjust attachment URLs for new Node IDs
-        pending_changes[:attachment_notes].each do |note|
+        pending_changes[:attachment_notes].each do |item|
+          text_attr = item.is_a?(ContentBlock) ? :content : :text
 
-          logger.info { "Adjusting screenshot URLs: Note ##{note.id}" }
+          logger.info { "Adjusting screenshot URLs: #{item.class.name} ##{item.id}" }
 
-          new_text = note.text.gsub(%r{^!(.*)/nodes/(\d+)/attachments/(.+)!$}) do |_|
+          new_text = item.send(text_attr).gsub(%r{^!(.*)/nodes/(\d+)/attachments/(.+)!$}) do |_|
             "!%s/nodes/%d/attachments/%s!" % [$1, lookup_table[:nodes][$2], $3]
           end
 
-          note.text = new_text
+          item.send(text_attr.to_s + "=", new_text)
 
-          raise "Couldn't save note attachment URL for Note ##{note.id}" unless validate_and_save(note)
+          raise "Couldn't save note attachment URL for #{item.class.name} ##{item.id}" unless validate_and_save(item)
         end
       end
 
