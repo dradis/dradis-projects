@@ -26,8 +26,9 @@ module Dradis::Plugins::Projects::Upload::V1
           evidence: [],
 
           # likewise we also need to hold on to the XML about evidence activities
-          # until after the evidence has been saved
+          # and comments until after the evidence has been saved
           evidence_activity: [],
+          evidence_comments: [],
 
           # all children nodes, we will need to find the ID of their new parents.
           orphan_nodes: []
@@ -53,6 +54,18 @@ module Dradis::Plugins::Projects::Upload::V1
         set_activity_user(activity, xml_activity.at_xpath("user_email").text)
 
         validate_and_save(activity)
+      end
+
+      def create_comments(commentable, xml_comments)
+        xml_comments.each do |xml_comment|
+          comment = commentable.comments.new(
+            content: xml_comment.at_xpath('content').text,
+            created_at: Time.at(xml_comment.at_xpath('created_at').text.to_i),
+            user_id: user_id_for_email(xml_comment.at_xpath('author')
+          )
+
+          return false unless validate_and_save(comment)
+        end
       end
 
       def finalize(template)
@@ -99,6 +112,8 @@ module Dradis::Plugins::Projects::Upload::V1
           pending_changes[:evidence_activity][i].each do |xml_activity|
             raise "Couldn't create activity for Evidence ##{evidence.id}" unless create_activity(evidence, xml_activity)
           end
+
+          raise "Couldn't create comments for Evidence ##{evidence.id}" unless create_comments(evidence, pending_changes[:evidence_comments])
         end
       end
 
@@ -156,6 +171,7 @@ module Dradis::Plugins::Projects::Upload::V1
           return false unless validate_and_save(issue)
 
           return false unless create_activities(issue, xml_issue)
+          return false unless create_comments(issue, xml_issue.at_xpath('comments/comment')
 
           if issue.text =~ %r{^!(.*)/nodes/(\d+)/attachments/(.+)!$}
             pending_changes[:attachment_notes] << issue
@@ -250,6 +266,7 @@ module Dradis::Plugins::Projects::Upload::V1
         node.update_attribute(:updated_at, updated_at.text.strip) if updated_at
 
         raise "Couldn't create activities for Node ##{node.id}" unless create_activities(node, xml_node)
+        raise "Couldn't create comments for Node ##{node.id}" unless create_comments(node, xml_node.at_xpath('comment/comments'))
 
         parse_node_notes(node, xml_node)
         parse_node_evidence(node, xml_node)
@@ -291,7 +308,8 @@ module Dradis::Plugins::Projects::Upload::V1
             evidence.update_attribute(:updated_at, updated_at.text.strip) if updated_at
 
             pending_changes[:evidence]          << evidence
-            pending_changes[:evidence_activity] << xml_evidence.xpath("activities/activity")
+            pending_changes[:evidence_activity] << xml_evidence.xpath('activities/activity')
+            pending_changes[:evidence_comments]  << xml_evidence.xpath('comments/comments')
 
             logger.info { "\tNew evidence added." }
           end
@@ -326,6 +344,7 @@ module Dradis::Plugins::Projects::Upload::V1
             end
 
             raise "Couldn't create activities for Note ##{note.id}" unless create_activities(note, xml_note)
+            raise "Couldn't create comments for Note ##{note.id}" unless create_comments(note, xml_note.at_xpath('comment/comments'))
 
             logger.info { "\tNew note added." }
           end
