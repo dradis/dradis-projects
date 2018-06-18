@@ -57,11 +57,13 @@ module Dradis::Plugins::Projects::Upload::V1
       end
 
       def create_comments(commentable, xml_comments)
+        return true if xml_comments.empty?
+
         xml_comments.each do |xml_comment|
           comment = commentable.comments.new(
             content: xml_comment.at_xpath('content').text,
             created_at: Time.at(xml_comment.at_xpath('created_at').text.to_i),
-            user_id: user_id_for_email(xml_comment.at_xpath('author')
+            user_id: user_id_for_email(xml_comment.at_xpath('author').text)
           )
 
           return false unless validate_and_save(comment)
@@ -171,7 +173,7 @@ module Dradis::Plugins::Projects::Upload::V1
           return false unless validate_and_save(issue)
 
           return false unless create_activities(issue, xml_issue)
-          return false unless create_comments(issue, xml_issue.at_xpath('comments/comment')
+          return false unless create_comments(issue, xml_issue.xpath('comments/comment'))
 
           if issue.text =~ %r{^!(.*)/nodes/(\d+)/attachments/(.+)!$}
             pending_changes[:attachment_notes] << issue
@@ -266,7 +268,7 @@ module Dradis::Plugins::Projects::Upload::V1
         node.update_attribute(:updated_at, updated_at.text.strip) if updated_at
 
         raise "Couldn't create activities for Node ##{node.id}" unless create_activities(node, xml_node)
-        raise "Couldn't create comments for Node ##{node.id}" unless create_comments(node, xml_node.at_xpath('comment/comments'))
+        raise "Couldn't create comments for Node ##{node.id}" unless create_comments(node, xml_node.xpath('comments/comment'))
 
         parse_node_notes(node, xml_node)
         parse_node_evidence(node, xml_node)
@@ -309,7 +311,7 @@ module Dradis::Plugins::Projects::Upload::V1
 
             pending_changes[:evidence]          << evidence
             pending_changes[:evidence_activity] << xml_evidence.xpath('activities/activity')
-            pending_changes[:evidence_comments]  << xml_evidence.xpath('comments/comments')
+            pending_changes[:evidence_comments] << xml_evidence.xpath('comments/comment')
 
             logger.info { "\tNew evidence added." }
           end
@@ -344,7 +346,7 @@ module Dradis::Plugins::Projects::Upload::V1
             end
 
             raise "Couldn't create activities for Note ##{note.id}" unless create_activities(note, xml_note)
-            raise "Couldn't create comments for Note ##{note.id}" unless create_comments(note, xml_note.at_xpath('comment/comments'))
+            raise "Couldn't create comments for Note ##{note.id}" unless create_comments(note, xml_note.xpath('comments/comment'))
 
             logger.info { "\tNew note added." }
           end
