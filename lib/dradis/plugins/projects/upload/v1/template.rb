@@ -30,6 +30,10 @@ module Dradis::Plugins::Projects::Upload::V1
           evidence_activity: [],
           evidence_comments: [],
 
+          # node comments cannot be saved until the node's parents have been resolved.
+          # this is why we temporarily store them until we can safely save to the DB
+          node_comments: [],
+
           # all children nodes, we will need to find the ID of their new parents.
           orphan_nodes: []
         }
@@ -115,17 +119,18 @@ module Dradis::Plugins::Projects::Upload::V1
             raise "Couldn't create activity for Evidence ##{evidence.id}" unless create_activity(evidence, xml_activity)
           end
 
-          raise "Couldn't create comments for Evidence ##{evidence.id}" unless create_comments(evidence, pending_changes[:evidence_comments])
+          raise "Couldn't create comments for Evidence ##{evidence.id}" unless create_comments(evidence, pending_changes[:evidence_comments][i])
         end
       end
 
       # Fix relationships between nodes to ensure parents and childrens match
       # with the new assigned :ids
       def finalize_nodes
-        pending_changes[:orphan_nodes].each do |node|
+        pending_changes[:orphan_nodes].each_with_index do |node, i|
           logger.info { "Finding parent for orphaned node: #{node.label}. Former parent was #{node.parent_id}" }
           node.parent_id = lookup_table[:nodes][node.parent_id.to_s]
           raise "Couldn't save node parent for Node ##{node.id}" unless validate_and_save(node)
+          raise "Couldn't save comments for Node ##{node.id}" unless create_comments(node, pending_changes[:node_comments][i])
         end
       end
 
@@ -256,7 +261,17 @@ module Dradis::Plugins::Projects::Upload::V1
               position:  position
             )
           node.save!(validate: has_nil_parent)
-          pending_changes[:orphan_nodes] << node if parent_id
+
+          if parent_id
+            pending_changes[:orphan_nodes]  << node
+            # We store the node comment instances for now since they are still
+            # invalid because their associated node is invalid (wrong parent_id).
+            # We later save them in the finalize_nodes method.
+            pending_changes[:node_comments] << xml_node.xpath('comments/comment')
+          else
+            raise "Couldn't create comments for Node ##{node.id}" unless create_comments(node, xml_node.xpath('comments/comment'))
+          end
+
         end
 
         if properties
@@ -268,7 +283,6 @@ module Dradis::Plugins::Projects::Upload::V1
         node.update_attribute(:updated_at, updated_at.text.strip) if updated_at
 
         raise "Couldn't create activities for Node ##{node.id}" unless create_activities(node, xml_node)
-        raise "Couldn't create comments for Node ##{node.id}" unless create_comments(node, xml_node.xpath('comments/comment'))
 
         parse_node_notes(node, xml_node)
         parse_node_evidence(node, xml_node)
