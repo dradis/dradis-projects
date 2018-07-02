@@ -28,11 +28,6 @@ module Dradis::Plugins::Projects::Upload::V1
           # likewise we also need to hold on to the XML about evidence activities
           # and comments until after the evidence has been saved
           evidence_activity: [],
-          evidence_comments: [],
-
-          # node comments cannot be saved until the node's parents have been resolved.
-          # this is why we temporarily store them until we can safely save to the DB
-          node_comments: [],
 
           # all children nodes, we will need to find the ID of their new parents.
           orphan_nodes: []
@@ -118,8 +113,6 @@ module Dradis::Plugins::Projects::Upload::V1
           pending_changes[:evidence_activity][i].each do |xml_activity|
             raise "Couldn't create activity for Evidence ##{evidence.id}" unless create_activity(evidence, xml_activity)
           end
-
-          raise "Couldn't create comments for Evidence ##{evidence.id}" unless create_comments(evidence, pending_changes[:evidence_comments][i])
         end
       end
 
@@ -130,7 +123,6 @@ module Dradis::Plugins::Projects::Upload::V1
           logger.info { "Finding parent for orphaned node: #{node.label}. Former parent was #{node.parent_id}" }
           node.parent_id = lookup_table[:nodes][node.parent_id.to_s]
           raise "Couldn't save node parent for Node ##{node.id}" unless validate_and_save(node)
-          raise "Couldn't save comments for Node ##{node.id}" unless create_comments(node, pending_changes[:node_comments][i])
         end
       end
 
@@ -264,12 +256,6 @@ module Dradis::Plugins::Projects::Upload::V1
 
           if parent_id
             pending_changes[:orphan_nodes]  << node
-            # We store the node comment instances for now since they are still
-            # invalid because their associated node is invalid (wrong parent_id).
-            # We later save them in the finalize_nodes method.
-            pending_changes[:node_comments] << xml_node.xpath('comments/comment')
-          else
-            raise "Couldn't create comments for Node ##{node.id}" unless create_comments(node, xml_node.xpath('comments/comment'))
           end
 
         end
@@ -325,7 +311,6 @@ module Dradis::Plugins::Projects::Upload::V1
 
             pending_changes[:evidence]          << evidence
             pending_changes[:evidence_activity] << xml_evidence.xpath('activities/activity')
-            pending_changes[:evidence_comments] << xml_evidence.xpath('comments/comment')
 
             logger.info { "\tNew evidence added." }
           end
@@ -360,7 +345,6 @@ module Dradis::Plugins::Projects::Upload::V1
             end
 
             raise "Couldn't create activities for Note ##{note.id}" unless create_activities(note, xml_note)
-            raise "Couldn't create comments for Note ##{note.id}" unless create_comments(note, xml_note.xpath('comments/comment'))
 
             logger.info { "\tNew note added." }
           end

@@ -56,7 +56,6 @@ module Dradis::Plugins::Projects::Export::V1
               evidence_builder.cdata!(evidence.content)
             end
             build_activities_for(evidence_builder, evidence)
-            build_comments_for(evidence_builder, evidence)
           end
         end
       end
@@ -115,7 +114,6 @@ module Dradis::Plugins::Projects::Export::V1
             # Evidence
             build_evidence_for_node(node_builder, node)
             build_activities_for(node_builder, node)
-            build_comments_for(node_builder, node)
           end
         end
       end
@@ -132,7 +130,6 @@ module Dradis::Plugins::Projects::Export::V1
               note_builder.cdata!(note.text)
             end
             build_activities_for(note_builder, note)
-            build_comments_for(note_builder, note)
           end
         end
       end
