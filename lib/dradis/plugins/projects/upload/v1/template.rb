@@ -55,20 +55,6 @@ module Dradis::Plugins::Projects::Upload::V1
         validate_and_save(activity)
       end
 
-      def create_comments(commentable, xml_comments)
-        return true if xml_comments.empty?
-
-        xml_comments.each do |xml_comment|
-          comment = commentable.comments.new(
-            content: xml_comment.at_xpath('content').text,
-            created_at: Time.at(xml_comment.at_xpath('created_at').text.to_i),
-            user_id: user_id_for_email(xml_comment.at_xpath('author').text)
-          )
-
-          return false unless validate_and_save(comment)
-        end
-      end
-
       def finalize(template)
         logger.info { 'Wrapping up...' }
 
@@ -119,7 +105,7 @@ module Dradis::Plugins::Projects::Upload::V1
       # Fix relationships between nodes to ensure parents and childrens match
       # with the new assigned :ids
       def finalize_nodes
-        pending_changes[:orphan_nodes].each_with_index do |node, i|
+        pending_changes[:orphan_nodes].each do |node|
           logger.info { "Finding parent for orphaned node: #{node.label}. Former parent was #{node.parent_id}" }
           node.parent_id = lookup_table[:nodes][node.parent_id.to_s]
           raise "Couldn't save node parent for Node ##{node.id}" unless validate_and_save(node)
@@ -170,7 +156,6 @@ module Dradis::Plugins::Projects::Upload::V1
           return false unless validate_and_save(issue)
 
           return false unless create_activities(issue, xml_issue)
-          return false unless create_comments(issue, xml_issue.xpath('comments/comment'))
 
           if issue.text =~ %r{^!(.*)/nodes/(\d+)/attachments/(.+)!$}
             pending_changes[:attachment_notes] << issue

@@ -16,18 +16,6 @@ module Dradis::Plugins::Projects::Export::V1
       end
     end
 
-    def build_comments_for(builder, commentable)
-      builder.comments do |comments_builder|
-        commentable.comments.each do |comment|
-          comments_builder.comment do |comment_builder|
-            comment_builder.content(comment.content)
-            comment_builder.author(comment.user.email)
-            comment_builder.created_at(comment.created_at.to_i)
-          end
-        end
-      end
-    end
-
     def build_categories(builder)
       categories = []
       categories << Category.issue if @issues.any?
@@ -73,7 +61,6 @@ module Dradis::Plugins::Projects::Export::V1
               issue_builder.cdata!(issue.text)
             end
             build_activities_for(issue_builder, issue)
-            build_comments_for(issue_builder, issue)
           end
         end
       end
