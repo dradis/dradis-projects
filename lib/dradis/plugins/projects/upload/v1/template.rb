@@ -26,7 +26,7 @@ module Dradis::Plugins::Projects::Upload::V1
           evidence: [],
 
           # likewise we also need to hold on to the XML about evidence activities
-          # and comments until after the evidence has been saved
+          # until after the evidence has been saved
           evidence_activity: [],
 
           # all children nodes, we will need to find the ID of their new parents.
@@ -240,11 +240,7 @@ module Dradis::Plugins::Projects::Upload::V1
               position:  position
             )
           node.save!(validate: has_nil_parent)
-
-          if parent_id
-            pending_changes[:orphan_nodes]  << node
-          end
-
+          pending_changes[:orphan_nodes]  << node if parent_id
         end
 
         if properties
