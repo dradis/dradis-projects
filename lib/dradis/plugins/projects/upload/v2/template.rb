@@ -13,10 +13,10 @@ module Dradis::Plugins::Projects::Upload::V2
             commentable_type: commentable.class.to_s,
             content: xml_comment.at_xpath('content').text,
             created_at: Time.at(xml_comment.at_xpath('created_at').text.to_i),
-            user_id: find_user_for_comments(author_email)
+            user_id: user_id_for_email(author_email)
           )
 
-          if comment.user_id.nil?
+          if comment.user.email != author_email
             comment.content = comment.content +
               "\n\nThis comment was imported into the project. Original author: "\
               "#{author_email}."
@@ -39,14 +39,6 @@ module Dradis::Plugins::Projects::Upload::V2
         return false unless create_activities(issue, xml_issue)
         return false unless create_comments(issue, xml_issue.xpath('comments/comment'))
       end
-
-      def find_user_for_comments(email)
-        # We call this method to cache the users in @users
-        user_id_for_email(email)
-
-        @users[email] || nil
-      end
-
     end
   end
 end
