@@ -138,7 +138,7 @@ module Dradis::Plugins::Projects::Upload::V1
       def parse_issues(template)
         issue = nil
         issue_category = Category.issue
-        issue_library  = Node.issue_library
+        issue_library  = project.issue_library
 
         logger.info { 'Processing Issues...' }
 
