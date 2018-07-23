@@ -29,6 +29,8 @@ module Dradis::Plugins::Projects::Upload::V2
       def create_issue(issue, xml_issue)
         return false unless super
         return false unless create_comments(issue, xml_issue.xpath('comments/comment'))
+
+        true
       end
     end
   end

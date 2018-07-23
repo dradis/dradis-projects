@@ -66,6 +66,8 @@ module Dradis::Plugins::Projects::Upload::V1
         return false unless validate_and_save(issue)
 
         return false unless create_activities(issue, xml_issue)
+
+        true
       end
 
       def finalize(template)
