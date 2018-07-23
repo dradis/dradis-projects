@@ -18,7 +18,7 @@ module Dradis::Plugins::Projects::Upload::V2
 
           if comment.user.email != author_email
             comment.content = comment.content +
-              "\n\nThis comment was imported into the project. Original author: "\
+              "\n\nOriginal author not available in this Dradis instance: "\
               "#{author_email}."
           end
 
@@ -27,16 +27,7 @@ module Dradis::Plugins::Projects::Upload::V2
       end
 
       def create_issue(issue, xml_issue)
-        # TODO: Need to find some way of checking for dups
-        # May be combination of text, category_id and created_at
-        issue.author   = xml_issue.at_xpath('author').text.strip
-        issue.text     = xml_issue.at_xpath('text').text
-        issue.node     = Node.issue_library
-        issue.category = Category.issue
-
-        return false unless validate_and_save(issue)
-
-        return false unless create_activities(issue, xml_issue)
+        return false unless super
         return false unless create_comments(issue, xml_issue.xpath('comments/comment'))
       end
     end
