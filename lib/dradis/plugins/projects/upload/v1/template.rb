@@ -55,6 +55,21 @@ module Dradis::Plugins::Projects::Upload::V1
         validate_and_save(activity)
       end
 
+      def create_issue(issue, xml_issue)
+        # TODO: Need to find some way of checking for dups
+        # May be combination of text, category_id and created_at
+        issue.author   = xml_issue.at_xpath('author').text.strip
+        issue.text     = xml_issue.at_xpath('text').text
+        issue.node     = Node.issue_library
+        issue.category = Category.issue
+
+        return false unless validate_and_save(issue)
+
+        return false unless create_activities(issue, xml_issue)
+
+        true
+      end
+
       def finalize(template)
         logger.info { 'Wrapping up...' }
 
@@ -137,30 +152,19 @@ module Dradis::Plugins::Projects::Upload::V1
       # Will need to adjust node ID after generating node structure
       def parse_issues(template)
         issue = nil
-        issue_category = Category.issue
-        issue_library  = Node.issue_library
 
         logger.info { 'Processing Issues...' }
 
         template.xpath('dradis-template/issues/issue').each do |xml_issue|
-          old_id = xml_issue.at_xpath('id').text.strip
-
-          # TODO: Need to find some way of checking for dups
-          # May be combination of text, category_id and created_at
           issue = Issue.new
-          issue.author   = xml_issue.at_xpath('author').text.strip
-          issue.text     = xml_issue.at_xpath('text').text
-          issue.node     = issue_library
-          issue.category = issue_category
 
-          return false unless validate_and_save(issue)
-
-          return false unless create_activities(issue, xml_issue)
+          return false unless create_issue(issue, xml_issue)
 
           if issue.text =~ %r{^!(.*)/nodes/(\d+)/attachments/(.+)!$}
             pending_changes[:attachment_notes] << issue
           end
 
+          old_id = xml_issue.at_xpath('id').text.strip
           lookup_table[:issues][old_id] = issue.id
           logger.info{ "New issue detected: #{issue.title}" }
         end
@@ -238,7 +242,7 @@ module Dradis::Plugins::Projects::Upload::V1
               position:  position
             )
           node.save!(validate: has_nil_parent)
-          pending_changes[:orphan_nodes] << node if parent_id
+          pending_changes[:orphan_nodes]  << node if parent_id
         end
 
         if properties
@@ -291,7 +295,7 @@ module Dradis::Plugins::Projects::Upload::V1
             evidence.update_attribute(:updated_at, updated_at.text.strip) if updated_at
 
             pending_changes[:evidence]          << evidence
-            pending_changes[:evidence_activity] << xml_evidence.xpath("activities/activity")
+            pending_changes[:evidence_activity] << xml_evidence.xpath('activities/activity')
 
             logger.info { "\tNew evidence added." }
           end

@@ -28,3 +28,4 @@ module Dradis::Plugins::Projects::Export
 end
 
 require_relative 'v1/template'
+require_relative 'v2/template'
