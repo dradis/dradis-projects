@@ -79,7 +79,7 @@ class UploadTasks < Thor
 
     detect_and_set_project_scope
 
-    default_user_id = @project.owners.first.id
+    default_user_id = @project ? @project.owners.first.id : User.first.id
 
     task_options.merge!({
       plugin: Dradis::Plugins::Projects::Upload::Template,
@@ -105,7 +105,7 @@ class UploadTasks < Thor
 
     detect_and_set_project_scope
 
-    default_user_id = @project.owners.first.id
+    default_user_id = @project ? @project.owners.first.id : User.first.id
 
     task_options.merge!({
       plugin: Dradis::Plugins::Projects::Upload::Package,

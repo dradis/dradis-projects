@@ -88,3 +88,4 @@ module Dradis::Plugins::Projects::Upload
 end
 
 require_relative 'v1/template'
+require_relative 'v2/template'
