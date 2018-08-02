@@ -60,7 +60,7 @@ module Dradis::Plugins::Projects::Upload::V1
         # May be combination of text, category_id and created_at
         issue.author   = xml_issue.at_xpath('author').text.strip
         issue.text     = xml_issue.at_xpath('text').text
-        issue.node     = Node.issue_library
+        issue.node     = project.issue_library
         issue.category = Category.issue
 
         return false unless validate_and_save(issue)
