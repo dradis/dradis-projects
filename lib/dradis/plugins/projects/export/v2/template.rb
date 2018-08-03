@@ -19,7 +19,7 @@ module Dradis::Plugins::Projects::Export::V2
     end
 
     def build_issues(builder)
-      @issues = Issue.where(node_id: Node.issue_library).includes(:activities)
+      @issues = Issue.where(node_id: project.issue_library).includes(:activities)
 
       builder.issues do |issues_builder|
         @issues.each do |issue|

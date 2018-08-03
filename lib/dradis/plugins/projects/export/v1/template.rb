@@ -50,7 +50,7 @@ module Dradis::Plugins::Projects::Export::V1
     end
 
     def build_issues(builder)
-      @issues = Issue.where(node_id: Node.issue_library).includes(:activities)
+      @issues = Issue.where(node_id: project.issue_library).includes(:activities)
 
       builder.issues do |issues_builder|
         @issues.each do |issue|
@@ -67,7 +67,7 @@ module Dradis::Plugins::Projects::Export::V1
     end
 
     def build_methodologies(builder)
-      methodologies = Node.methodology_library.notes
+      methodologies = project.methodology_library.notes
       builder.methodologies do |methodologies_builder|
         methodologies.each do |methodology|
           methodologies_builder.methodology(version: VERSION) do |methodology_builder|
