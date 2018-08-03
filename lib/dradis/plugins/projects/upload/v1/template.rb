@@ -175,7 +175,7 @@ module Dradis::Plugins::Projects::Upload::V1
 
       def parse_methodologies(template)
         methodology_category = Category.default
-        methodology_library  = Node.methodology_library
+        methodology_library  = project.methodology_library
 
         logger.info { 'Processing Methodologies...' }
 
