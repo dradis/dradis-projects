@@ -1,5 +1,12 @@
-## Dradis Framework 3.10 (###) ##
+## Dradis Framework 4.0 (August, 2018) ##
+
 *   Use project scopes
+
+*   Check project existence for default user id
+
+*   Comments export import
+
+*   Replace Node methods that are now Project methods
 
 ## Dradis Framework 3.9 (January, 2018) ##
 
