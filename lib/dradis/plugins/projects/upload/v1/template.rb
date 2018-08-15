@@ -50,6 +50,8 @@ module Dradis::Plugins::Projects::Upload::V1
           created_at: Time.at(xml_activity.at_xpath("created_at").text.to_i)
         )
 
+        activity.project_id = project.id if activity.respond_to?(:project)
+
         set_activity_user(activity, xml_activity.at_xpath("user_email").text)
 
         validate_and_save(activity)
