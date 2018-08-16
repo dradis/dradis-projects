@@ -50,6 +50,8 @@ module Dradis::Plugins::Projects::Upload::V1
           created_at: Time.at(xml_activity.at_xpath("created_at").text.to_i)
         )
 
+        activity.project_id = project.id if activity.respond_to?(:project)
+
         set_activity_user(activity, xml_activity.at_xpath("user_email").text)
 
         validate_and_save(activity)
@@ -224,10 +226,10 @@ module Dradis::Plugins::Projects::Upload::V1
         # - the Configuration.uploadsNode node (detected by its label)
         # - any nodes with type different from DEFAULT or HOST
         if label == Configuration.plugin_uploads_node
-          node = Node.create_with(type_id: type_id, parent_id: parent_id)
+          node = project.nodes.create_with(type_id: type_id, parent_id: parent_id)
               .find_or_create_by!(label: label)
         elsif Node::Types::USER_TYPES.exclude?(type_id.to_i)
-          node = Node.create_with(label: label)
+          node = project.nodes.create_with(label: label)
               .find_or_create_by!(type_id: type_id)
         else
           # We don't want to validate child nodes here yet since they always
@@ -235,7 +237,7 @@ module Dradis::Plugins::Projects::Upload::V1
           # finalize_nodes method.
           has_nil_parent = !parent_id
           node =
-            Node.new(
+            project.nodes.new(
               type_id:   type_id,
               label:     label,
               parent_id: parent_id,
