@@ -345,7 +345,10 @@ module Dradis::Plugins::Projects::Upload::V1
 
         template.xpath('dradis-template/tags/tag').each do |xml_tag|
           name = xml_tag.at_xpath('name').text()
-          tag  = Tag.find_or_create_by!(name: name)
+          tag_params = { name: name }
+          tag_params[:project_id] = project.id if Tag.has_attribute?(:project_id)
+          tag = Tag.where(tag_params).first_or_initialize
+          tag.save!
           logger.info { "New tag detected: #{name}" }
 
           xml_tag.xpath('./taggings/tagging').each do |xml_tagging|
