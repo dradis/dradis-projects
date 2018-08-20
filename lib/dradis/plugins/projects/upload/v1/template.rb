@@ -90,9 +90,9 @@ module Dradis::Plugins::Projects::Upload::V1
           logger.info { "Adjusting screenshot URLs: #{item.class.name} ##{item.id}" }
 
           new_text = item.send(text_attr).gsub(%r{^!(.*)/nodes/(\d+)/attachments/(.+)!$}) do |_|
-            prefix = "$1/projects/#{project.id}" unless $1.match?(%r{/projects/\d+})
-            prefix.gsub(%r{(.*)/(\d+)}) {|_| "%s/%d" % [$1, project.id] }
-            "!%s/nodes/%d/attachments/%s!" % [prefix, lookup_table[:nodes][$2], $3]
+            prefix, node_id, attachment = $1, $2, $3
+            prefix = prefix[%r{^(.*)/projects}, 1] || prefix
+            "!%s/projects/%d/nodes/%d/attachments/%s!" % [prefix, project.id, lookup_table[:nodes][node_id], attachment]
           end
 
           item.send(text_attr.to_s + "=", new_text)
@@ -109,9 +109,9 @@ module Dradis::Plugins::Projects::Upload::V1
           evidence.issue_id = lookup_table[:issues][evidence.issue_id.to_s]
 
           new_content = evidence.content.gsub(%r{^!(.*)/nodes/(\d+)/attachments/(.+)!$}) do |_|
-            prefix = "$1/projects/#{project.id}" unless $1.match?(%r{/projects/\d+})
-            prefix.gsub(%r{(.*)/(\d+)}) {|_| "%s/%d" % [$1, project.id] }
-            "!%s/nodes/%d/attachments/%s!" % [prefix, lookup_table[:nodes][$2], $3]
+            prefix, node_id, attachment = $1, $2, $3
+            prefix = prefix[%r{^(.*)/projects}, 1] || prefix
+            "!%s/projects/%d/nodes/%d/attachments/%s!" % [prefix, project.id, lookup_table[:nodes][node_id], attachment]
           end
           evidence.content = new_content
 
