@@ -20,13 +20,13 @@ describe Dradis::Plugins::Projects::Upload::V1::Template::Importer do
       importer.import(file: file_path)
 
       p_id = project.id
-      n_id = project.issues.first.node_id
+      n_id = project.plugin_uploads_node.id
 
       expect(project.issues.first.text).to include(
-        "!/pro/projects/1/nodes/1/attachments/hello.jpg!\n\n" +
-        "!/projects/1/nodes/1/attachments/hello.jpg!\n\n" +
-        "!/pro/projects/1/nodes/1/attachments/hello.jpg!\n\n" +
-        "!/projects/1/nodes/1/attachments/hello.jpg!"
+        "!/pro/projects/#{p_id}/nodes/#{n_id}/attachments/hello.jpg!\n\n" +
+        "!/projects/#{p_id}/nodes/#{n_id}/attachments/hello.jpg!\n\n" +
+        "!/pro/projects/#{p_id}/nodes/#{n_id}/attachments/hello.jpg!\n\n" +
+        "!/projects/#{p_id}/nodes/#{n_id}/attachments/hello.jpg!"
       )
     end
   end
