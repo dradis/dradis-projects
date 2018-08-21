@@ -5,6 +5,8 @@ module Dradis::Plugins::Projects::Upload::V1
 
       attr_accessor :attachment_notes, :logger, :pending_changes
 
+      ATTACHMENT_URL = %r{^!(/[a-z]+)?/(?:projects/\d+/)?nodes/(\d+)/attachments/(.+)!$}
+
       def post_initialize(args={})
         @lookup_table = {
           categories: {},
@@ -89,12 +91,9 @@ module Dradis::Plugins::Projects::Upload::V1
 
           logger.info { "Adjusting screenshot URLs: #{item.class.name} ##{item.id}" }
 
-          new_text = item.send(text_attr).gsub(%r{^!(.*)/nodes/(\d+)/attachments/(.+)!$}) do |_|
-            prefix, node_id, attachment = $1, $2, $3
-            prefix = prefix[%r{^(.*)/projects}, 1] || prefix
-            "!%s/projects/%d/nodes/%d/attachments/%s!" % [prefix, project.id, lookup_table[:nodes][node_id], attachment]
+          new_text = item.send(text_attr).gsub(ATTACHMENT_URL) do |_|
+            "!%s/projects/%d/nodes/%d/attachments/%s!" % [$1, project.id, lookup_table[:nodes][$2], $3]
           end
-
           item.send(text_attr.to_s + "=", new_text)
 
           raise "Couldn't save note attachment URL for #{item.class.name} ##{item.id}" unless validate_and_save(item)
@@ -108,10 +107,8 @@ module Dradis::Plugins::Projects::Upload::V1
           logger.info { "Setting issue_id for evidence" }
           evidence.issue_id = lookup_table[:issues][evidence.issue_id.to_s]
 
-          new_content = evidence.content.gsub(%r{^!(.*)/nodes/(\d+)/attachments/(.+)!$}) do |_|
-            prefix, node_id, attachment = $1, $2, $3
-            prefix = prefix[%r{^(.*)/projects}, 1] || prefix
-            "!%s/projects/%d/nodes/%d/attachments/%s!" % [prefix, project.id, lookup_table[:nodes][node_id], attachment]
+          new_content = evidence.content.gsub(ATTACHMENT_URL) do |_|
+            "!%s/projects/%d/nodes/%d/attachments/%s!" % [$1, project.id, lookup_table[:nodes][$2], $3]
           end
           evidence.content = new_content
 
