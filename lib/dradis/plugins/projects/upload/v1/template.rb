@@ -5,6 +5,8 @@ module Dradis::Plugins::Projects::Upload::V1
 
       attr_accessor :attachment_notes, :logger, :pending_changes
 
+      ATTACHMENT_URL = %r{^!(/[a-z]+)?/(?:projects/\d+/)?nodes/(\d+)/attachments/(.+)!$}
+
       def post_initialize(args={})
         @lookup_table = {
           categories: {},
@@ -50,6 +52,8 @@ module Dradis::Plugins::Projects::Upload::V1
           created_at: Time.at(xml_activity.at_xpath("created_at").text.to_i)
         )
 
+        activity.project_id = project.id if activity.respond_to?(:project)
+
         set_activity_user(activity, xml_activity.at_xpath("user_email").text)
 
         validate_and_save(activity)
@@ -87,10 +91,9 @@ module Dradis::Plugins::Projects::Upload::V1
 
           logger.info { "Adjusting screenshot URLs: #{item.class.name} ##{item.id}" }
 
-          new_text = item.send(text_attr).gsub(%r{^!(.*)/nodes/(\d+)/attachments/(.+)!$}) do |_|
-            "!%s/nodes/%d/attachments/%s!" % [$1, lookup_table[:nodes][$2], $3]
+          new_text = item.send(text_attr).gsub(ATTACHMENT_URL) do |_|
+            "!%s/projects/%d/nodes/%d/attachments/%s!" % [$1, project.id, lookup_table[:nodes][$2], $3]
           end
-
           item.send(text_attr.to_s + "=", new_text)
 
           raise "Couldn't save note attachment URL for #{item.class.name} ##{item.id}" unless validate_and_save(item)
@@ -104,8 +107,8 @@ module Dradis::Plugins::Projects::Upload::V1
           logger.info { "Setting issue_id for evidence" }
           evidence.issue_id = lookup_table[:issues][evidence.issue_id.to_s]
 
-          new_content      = evidence.content.gsub(%r{^!(.*)/nodes/(\d+)/attachments/(.+)!$}) do |_|
-            "!%s/nodes/%d/attachments/%s!" % [$1, lookup_table[:nodes][$2], $3]
+          new_content = evidence.content.gsub(ATTACHMENT_URL) do |_|
+            "!%s/projects/%d/nodes/%d/attachments/%s!" % [$1, project.id, lookup_table[:nodes][$2], $3]
           end
           evidence.content = new_content
 
@@ -224,10 +227,10 @@ module Dradis::Plugins::Projects::Upload::V1
         # - the Configuration.uploadsNode node (detected by its label)
         # - any nodes with type different from DEFAULT or HOST
         if label == Configuration.plugin_uploads_node
-          node = Node.create_with(type_id: type_id, parent_id: parent_id)
+          node = project.nodes.create_with(type_id: type_id, parent_id: parent_id)
               .find_or_create_by!(label: label)
         elsif Node::Types::USER_TYPES.exclude?(type_id.to_i)
-          node = Node.create_with(label: label)
+          node = project.nodes.create_with(label: label)
               .find_or_create_by!(type_id: type_id)
         else
           # We don't want to validate child nodes here yet since they always
@@ -235,7 +238,7 @@ module Dradis::Plugins::Projects::Upload::V1
           # finalize_nodes method.
           has_nil_parent = !parent_id
           node =
-            Node.new(
+            project.nodes.new(
               type_id:   type_id,
               label:     label,
               parent_id: parent_id,
@@ -343,7 +346,9 @@ module Dradis::Plugins::Projects::Upload::V1
 
         template.xpath('dradis-template/tags/tag').each do |xml_tag|
           name = xml_tag.at_xpath('name').text()
-          tag  = Tag.find_or_create_by!(name: name)
+          tag_params = { name: name }
+          tag_params[:project_id] = project.id if Tag.has_attribute?(:project_id)
+          tag = Tag.where(tag_params).first_or_create
           logger.info { "New tag detected: #{name}" }
 
           xml_tag.xpath('./taggings/tagging').each do |xml_tagging|
