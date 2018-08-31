@@ -80,7 +80,7 @@ module Dradis::Plugins::Projects::Export::V1
     end
 
     def build_nodes(builder)
-      @nodes = Node.includes(:activities, :evidence, :notes, evidence: [:activities], notes: [:activities, :category]).all.reject do |node|
+      @nodes = project.nodes.includes(:activities, :evidence, :notes, evidence: [:activities], notes: [:activities, :category]).all.reject do |node|
         [Node::Types::METHODOLOGY,
           Node::Types::ISSUELIB].include?(node.type_id)
       end
@@ -125,7 +125,7 @@ module Dradis::Plugins::Projects::Export::V1
     def build_report_content(builder); end
 
     def build_tags(builder)
-      tags = Tag.all
+      tags = project.tags
       builder.tags do |tags_builder|
         tags.each do |tag|
           tags_builder.tag do |tag_builder|
