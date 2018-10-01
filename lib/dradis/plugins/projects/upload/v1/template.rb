@@ -38,6 +38,10 @@ module Dradis::Plugins::Projects::Upload::V1
 
       private
 
+      def create_comments(commentable, xml_comments)
+        true
+      end
+
       def create_activities(trackable, xml_trackable)
         xml_trackable.xpath('activities/activity').each do |xml_activity|
           # if 'validate_and_save(activity)' returns false, it needs
@@ -333,6 +337,7 @@ module Dradis::Plugins::Projects::Upload::V1
             end
 
             raise "Couldn't create activities for Note ##{note.id}" unless create_activities(note, xml_note)
+            raise "Couldn't create comments for Note ##{note.id}" unless create_comments(note, xml_note.xpath('comments/comment'))
 
             logger.info { "\tNew note added." }
           end

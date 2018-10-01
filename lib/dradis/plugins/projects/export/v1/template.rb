@@ -33,6 +33,8 @@ module Dradis::Plugins::Projects::Export::V1
       end
     end
 
+    def build_comments_for(note_builder, note); end
+
     def build_evidence_for_node(builder, node)
       builder.evidence do |evidences_builder|
         node.evidence.each do |evidence|
@@ -117,6 +119,7 @@ module Dradis::Plugins::Projects::Export::V1
               note_builder.cdata!(note.text)
             end
             build_activities_for(note_builder, note)
+            build_comments_for(note_builder, note)
           end
         end
       end
