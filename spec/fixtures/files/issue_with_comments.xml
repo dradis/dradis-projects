@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?><dradis-template version="3"><nodes><node><id>724</id><label>Report content</label><parent-id/><position>0</position><properties><![CDATA[{
+}]]></properties><type-id>4</type-id><notes></notes><evidence></evidence><activities></activities></node><node><id>725</id><label>Uploaded files</label><parent-id/><position>0</position><properties><![CDATA[{
+}]]></properties><type-id>0</type-id><notes></notes><evidence></evidence><activities></activities></node></nodes><issues><issue><id>1780</id><author>admin@securityroots.com</author><text><![CDATA[#[Title]#
+I1
+
+#[Description]#
+
+]]></text><activities><activity><action>create</action><user_email>admin@securityroots.com</user_email><created_at>1535647375</created_at></activity><activity><action>update</action><user_email>admin@securityroots.com</user_email><created_at>1535647387</created_at></activity></activities><comments><comment><content><![CDATA[This is a comment]]></content><author>admin@securityroots.com</author><created_at>1535650276</created_at></comment></comments></issue></issues><methodologies></methodologies><categories><category><id>4</id><name>Issue description</name></category></categories><tags><tag><id>66</id><name>!9467bd_critical</name><taggings></taggings></tag><tag><id>67</id><name>!d62728_high</name><taggings></taggings></tag><tag><id>68</id><name>!ff7f0e_medium</name><taggings><tagging><taggable-id>1780</taggable-id><taggable-type>Note</taggable-type></tagging></taggings></tag><tag><id>69</id><name>!6baed6_low</name><taggings></taggings></tag><tag><id>70</id><name>!2ca02c_info</name><taggings></taggings></tag></tags><content_blocks></content_blocks></dradis-template>
