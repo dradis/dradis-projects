@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?><dradis-template version="2"><nodes><node><id>3</id><label>Node 1</label><parent-id/><position>0</position><properties><![CDATA[{
+}]]></properties><type-id>1</type-id><notes><note><id>2</id><author>xavi</author><category-id>2</category-id><text><![CDATA[#[Title]#
+Note 1
+
+#[Description]#
+
+]]></text><activities><activity><action>create</action><user_email>xavi</user_email><created_at>1538467955</created_at></activity></activities><comments><comment><content><![CDATA[A comment on a note]]></content><author>xavi</author><created_at>1538467968</created_at></comment></comments></note></notes><evidence></evidence><activities><activity><action>create</action><user_email>xavi</user_email><created_at>1538467945</created_at></activity></activities></node></nodes><issues><issue><id>1</id><author>xavi</author><text><![CDATA[#[Title]#
+Issue 1
+
+#[Description]#
+
+]]></text><activities><activity><action>create</action><user_email>xavi</user_email><created_at>1538467938</created_at></activity></activities><comments><comment><content><![CDATA[A comment on an issue]]></content><author>xavi</author><created_at>1538467997</created_at></comment></comments></issue></issues><methodologies></methodologies><categories><category><id>1</id><name>Issue description</name></category><category><id>2</id><name>Default category</name></category></categories><tags><tag><id>1</id><name>!9467bd_critical</name><taggings></taggings></tag><tag><id>2</id><name>!d62728_high</name><taggings></taggings></tag><tag><id>3</id><name>!ff7f0e_medium</name><taggings></taggings></tag><tag><id>4</id><name>!6baed6_low</name><taggings></taggings></tag><tag><id>5</id><name>!2ca02c_info</name><taggings></taggings></tag></tags></dradis-template>

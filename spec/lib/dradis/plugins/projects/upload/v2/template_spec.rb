@@ -6,11 +6,11 @@ describe Dradis::Plugins::Projects::Upload::V1::Template::Importer do
   let(:user) { create(:user) }
   let(:importer_class) { Dradis::Plugins::Projects::Upload::Template }
   let(:file_path) {
-    File.join(File.dirname(__FILE__), '../../../../../../', 'fixtures', 'files', 'issue_with_comments.xml')
+    File.join(File.dirname(__FILE__), '../../../../../../', 'fixtures', 'files', 'with_comments.xml')
   }
 
-  context 'uploading a template with comments in issues' do
-    it 'imports the comments' do
+  context 'uploading a template with comments' do
+    before do
       importer = importer_class::Importer.new(
         default_user_id: user.id,
         plugin: importer_class,
@@ -18,12 +18,16 @@ describe Dradis::Plugins::Projects::Upload::V1::Template::Importer do
       )
 
       importer.import(file: file_path)
+    end
 
-      p_id = project.id
-      n_id = project.plugin_uploads_node.id
+    it 'imports comments in issues' do
+      issue = project.issues.first
+      expect(issue.comments.first.content).to include('A comment on an issue')
+    end
 
-      expect(project.issues.first.comments.count).to eq 1
-      expect(project.issues.first.comments.first.content).to include('This is a comment')
+    it 'imports comments in notes' do
+      note = project.nodes.find_by(label: "Node 1").notes.first
+      expect(note.comments.first.content).to include('A comment on a note')
     end
   end
 end
