@@ -1,13 +1,18 @@
 require 'rails_helper'
 
-describe Dradis::Plugins::Projects::Upload::V1::Template::Importer do
-
+describe Dradis::Plugins::Projects::Upload::V2::Template::Importer do
   let(:project) { create(:project) }
   let(:user) { create(:user) }
   let(:importer_class) { Dradis::Plugins::Projects::Upload::Template }
-  let(:file_path) {
-    File.join(File.dirname(__FILE__), '../../../../../../', 'fixtures', 'files', 'with_comments.xml')
-  }
+  let(:file_path) do
+    File.join(
+      File.dirname(__FILE__),
+      '../../../../../../',
+      'fixtures',
+      'files',
+      'with_comments.xml'
+    )
+  end
 
   context 'uploading a template with comments' do
     before do
@@ -26,7 +31,7 @@ describe Dradis::Plugins::Projects::Upload::V1::Template::Importer do
     end
 
     it 'imports comments in notes' do
-      note = project.nodes.find_by(label: "Node 1").notes.first
+      note = project.nodes.find_by(label: 'Node 1').notes.first
       expect(note.comments.first.content).to include('A comment on a note')
     end
   end
