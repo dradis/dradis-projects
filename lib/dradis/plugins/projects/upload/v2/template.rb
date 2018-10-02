@@ -25,13 +25,6 @@ module Dradis::Plugins::Projects::Upload::V2
           return false unless validate_and_save(comment)
         end
       end
-
-      def create_issue(issue, xml_issue)
-        return false unless super
-        return false unless create_comments(issue, xml_issue.xpath('comments/comment'))
-
-        true
-      end
     end
   end
 end

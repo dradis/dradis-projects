@@ -75,6 +75,8 @@ module Dradis::Plugins::Projects::Upload::V1
 
         return false unless create_activities(issue, xml_issue)
 
+        return false unless create_comments(issue, xml_issue.xpath('comments/comment'))
+
         true
       end
 
