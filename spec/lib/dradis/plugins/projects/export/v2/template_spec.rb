@@ -1,16 +1,14 @@
 require 'rails_helper'
 
 describe Dradis::Plugins::Projects::Export::V2::Template do
-  let(:exporter_class) { Dradis::Plugins::Projects::Export::V2::Template }
   let(:project) { create(:project) }
   let(:user) { create(:user) }
   let(:export) do
-    exporter = exporter_class.new(
+    described_class.new(
       default_user_id: user.id,
       plugin: Dradis::Plugins::Projects,
       project_id: project.id
-    )
-    exporter.export
+    ).export
   end
 
   context 'exporting a project' do
