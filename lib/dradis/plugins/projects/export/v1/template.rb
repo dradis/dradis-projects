@@ -33,6 +33,7 @@ module Dradis::Plugins::Projects::Export::V1
       end
     end
 
+    # No-op here, overwritten in V2
     def build_comments_for(builder, commentable); end
 
     def build_evidence_for_node(builder, node)
@@ -126,6 +127,7 @@ module Dradis::Plugins::Projects::Export::V1
       end
     end
 
+    # No-op here, overwritten in PRO
     def build_report_content(builder); end
 
     def build_tags(builder)

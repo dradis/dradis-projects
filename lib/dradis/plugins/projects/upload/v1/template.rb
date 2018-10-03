@@ -38,6 +38,7 @@ module Dradis::Plugins::Projects::Upload::V1
 
       private
 
+      # No-op here, overwritten in V2
       def create_comments(commentable, xml_comments)
         true
       end
