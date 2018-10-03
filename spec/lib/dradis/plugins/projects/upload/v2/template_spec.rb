@@ -25,14 +25,21 @@ describe Dradis::Plugins::Projects::Upload::V2::Template::Importer do
       importer.import(file: file_path)
     end
 
+    let(:node) { project.nodes.find_by(label: 'Node 1') }
+
     it 'imports comments in issues' do
       issue = project.issues.first
       expect(issue.comments.first.content).to include('A comment on an issue')
     end
 
     it 'imports comments in notes' do
-      note = project.nodes.find_by(label: 'Node 1').notes.first
+      note = node.notes.first
       expect(note.comments.first.content).to include('A comment on a note')
+    end
+
+    it 'imports comments in evidence' do
+      evidence = node.evidence.first
+      expect(evidence.comments.first.content).to include('A comment on an evidence')
     end
   end
 end
