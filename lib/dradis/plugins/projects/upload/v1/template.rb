@@ -28,8 +28,9 @@ module Dradis::Plugins::Projects::Upload::V1
           evidence: [],
 
           # likewise we also need to hold on to the XML about evidence activities
-          # until after the evidence has been saved
+          # and comments until after the evidence has been saved
           evidence_activity: [],
+          evidence_comments: [],
 
           # all children nodes, we will need to find the ID of their new parents.
           orphan_nodes: []
@@ -124,6 +125,9 @@ module Dradis::Plugins::Projects::Upload::V1
           pending_changes[:evidence_activity][i].each do |xml_activity|
             raise "Couldn't create activity for Evidence ##{evidence.id}" unless create_activity(evidence, xml_activity)
           end
+
+          xml_comments = pending_changes[:evidence_comments][i]
+          raise "Couldn't create comments for Evidence ##{evidence.id}" unless create_comments(evidence, xml_comments)
         end
       end
 
@@ -306,6 +310,7 @@ module Dradis::Plugins::Projects::Upload::V1
 
             pending_changes[:evidence]          << evidence
             pending_changes[:evidence_activity] << xml_evidence.xpath('activities/activity')
+            pending_changes[:evidence_comments] << xml_evidence.xpath('comments/comment')
 
             logger.info { "\tNew evidence added." }
           end

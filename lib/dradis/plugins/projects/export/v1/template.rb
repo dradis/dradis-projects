@@ -47,6 +47,7 @@ module Dradis::Plugins::Projects::Export::V1
               evidence_builder.cdata!(evidence.content)
             end
             build_activities_for(evidence_builder, evidence)
+            build_comments_for(evidence_builder, evidence)
           end
         end
       end
