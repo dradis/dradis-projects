@@ -17,24 +17,5 @@ module Dradis::Plugins::Projects::Export::V2
         end
       end
     end
-
-    def build_issues(builder)
-      @issues = Issue.where(node_id: project.issue_library).includes(:activities)
-
-      builder.issues do |issues_builder|
-        @issues.each do |issue|
-          issues_builder.issue do |issue_builder|
-            issue_builder.id(issue.id)
-            issue_builder.author(issue.author)
-            issue_builder.text do
-              issue_builder.cdata!(issue.text)
-            end
-            build_activities_for(issue_builder, issue)
-            build_comments_for(issue_builder, issue)
-          end
-        end
-      end
-    end
-
   end
 end

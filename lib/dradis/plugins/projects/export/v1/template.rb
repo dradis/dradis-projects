@@ -33,6 +33,9 @@ module Dradis::Plugins::Projects::Export::V1
       end
     end
 
+    # No-op here, overwritten in V2
+    def build_comments_for(builder, commentable); end
+
     def build_evidence_for_node(builder, node)
       builder.evidence do |evidences_builder|
         node.evidence.each do |evidence|
@@ -61,6 +64,7 @@ module Dradis::Plugins::Projects::Export::V1
               issue_builder.cdata!(issue.text)
             end
             build_activities_for(issue_builder, issue)
+            build_comments_for(issue_builder, issue)
           end
         end
       end
@@ -117,11 +121,13 @@ module Dradis::Plugins::Projects::Export::V1
               note_builder.cdata!(note.text)
             end
             build_activities_for(note_builder, note)
+            build_comments_for(note_builder, note)
           end
         end
       end
     end
 
+    # No-op here, overwritten in PRO
     def build_report_content(builder); end
 
     def build_tags(builder)
