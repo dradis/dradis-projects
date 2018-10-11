@@ -1,6 +1,6 @@
 ## Dradis Framework 3.11 (XXX, 2018) ##
 
-*  Note comments in export/import 
+*  Note and evidence comments in export/import
 
 ## Dradis Framework 3.10 (August, 2018) ##
 
