@@ -28,8 +28,9 @@ module Dradis::Plugins::Projects::Upload::V1
           evidence: [],
 
           # likewise we also need to hold on to the XML about evidence activities
-          # until after the evidence has been saved
+          # and comments until after the evidence has been saved
           evidence_activity: [],
+          evidence_comments: [],
 
           # all children nodes, we will need to find the ID of their new parents.
           orphan_nodes: []
@@ -37,6 +38,11 @@ module Dradis::Plugins::Projects::Upload::V1
       end
 
       private
+
+      # No-op here, overwritten in V2
+      def create_comments(commentable, xml_comments)
+        true
+      end
 
       def create_activities(trackable, xml_trackable)
         xml_trackable.xpath('activities/activity').each do |xml_activity|
@@ -70,6 +76,8 @@ module Dradis::Plugins::Projects::Upload::V1
         return false unless validate_and_save(issue)
 
         return false unless create_activities(issue, xml_issue)
+
+        return false unless create_comments(issue, xml_issue.xpath('comments/comment'))
 
         true
       end
@@ -117,6 +125,9 @@ module Dradis::Plugins::Projects::Upload::V1
           pending_changes[:evidence_activity][i].each do |xml_activity|
             raise "Couldn't create activity for Evidence ##{evidence.id}" unless create_activity(evidence, xml_activity)
           end
+
+          xml_comments = pending_changes[:evidence_comments][i]
+          raise "Couldn't create comments for Evidence ##{evidence.id}" unless create_comments(evidence, xml_comments)
         end
       end
 
@@ -299,6 +310,7 @@ module Dradis::Plugins::Projects::Upload::V1
 
             pending_changes[:evidence]          << evidence
             pending_changes[:evidence_activity] << xml_evidence.xpath('activities/activity')
+            pending_changes[:evidence_comments] << xml_evidence.xpath('comments/comment')
 
             logger.info { "\tNew evidence added." }
           end
@@ -333,6 +345,7 @@ module Dradis::Plugins::Projects::Upload::V1
             end
 
             raise "Couldn't create activities for Note ##{note.id}" unless create_activities(note, xml_note)
+            raise "Couldn't create comments for Note ##{note.id}" unless create_comments(note, xml_note.xpath('comments/comment'))
 
             logger.info { "\tNew note added." }
           end
