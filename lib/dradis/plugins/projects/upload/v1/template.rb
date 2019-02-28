@@ -97,10 +97,9 @@ module Dradis::Plugins::Projects::Upload::V1
         pending_changes[:attachment_notes].each do |item|
           logger.info { "Adjusting screenshot URLs: #{item.class.name} ##{item.id}" }
 
-          new_text = item.send(:text).gsub(ATTACHMENT_URL) do |_|
+          item.text = item.text.gsub(ATTACHMENT_URL) do |_|
             "!%s/projects/%d/nodes/%d/attachments/%s!" % [$1, project.id, lookup_table[:nodes][$2], $3]
           end
-          item.text = new_text
 
           raise "Couldn't save note attachment URL for #{item.class.name} ##{item.id}" unless validate_and_save(item)
         end
