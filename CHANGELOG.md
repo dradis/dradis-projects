@@ -1,3 +1,7 @@
+## Dradis Framework 3.12 (XXX, 2019) ##
+
+*  Fix upload with attachments
+
 ## Dradis Framework 3.11 (November, 2018) ##
 
 *  Note and evidence comments in export/import
