@@ -1,10 +1,14 @@
+## Dradis Framework 3.15 (XXX, 2019) ##
+
+*  Fix upload with attachments
+
 ## Dradis Framework 3.14 (August, 2019) ##
 
 *  No changes
 
 ## Dradis Framework 3.13 (June, 2019) ##
 
-*  Fix upload with attachments
+*  No changes
 
 ## Dradis Framework 3.12 (March, 2019) ##
 
