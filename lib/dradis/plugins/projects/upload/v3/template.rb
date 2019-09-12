@@ -138,7 +138,8 @@ module Dradis::Plugins::Projects::Upload::V3
 
           board = content_service.create_board(
             name: xml_board.at_xpath('name').text,
-            node_id: node_id
+            node_id: node_id,
+            project: project
           )
 
           xml_board.xpath('./list').each do |xml_list|
