@@ -89,3 +89,4 @@ end
 
 require_relative 'v1/template'
 require_relative 'v2/template'
+require_relative 'v3/template'

@@ -95,7 +95,12 @@ module Dradis::Plugins::Projects::Upload::V1
       def finalize_attachments
         # Adjust attachment URLs for new Node IDs
         pending_changes[:attachment_notes].each do |item|
-          text_attr = item.is_a?(ContentBlock) ? :content : :text
+          text_attr =
+            if defined?(ContentBlock) && item.is_a?(ContentBlock)
+              :content
+            else
+              :text
+            end
 
           logger.info { "Adjusting screenshot URLs: #{item.class.name} ##{item.id}" }
 

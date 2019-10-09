@@ -1,3 +1,8 @@
+## Dradis Framework 3.15 (XXX, 2019) ##
+
+*  Fix upload with attachments
+*  Being able to export/upload boards (v3)
+
 ## Dradis Framework 3.14.1 (October, 2019) ##
 
 *  Fix directory traversal vulnerability
