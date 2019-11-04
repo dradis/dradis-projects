@@ -18,18 +18,21 @@ module Dradis::Plugins::Projects::Upload
         success = false
 
         # Unpack the archive in a temporary location
-        FileUtils.mkdir Rails.root.join('tmp', 'zip')
+        temporary_dir = Rails.root.join('tmp', 'zip')
+        FileUtils.mkdir temporary_dir
 
         begin
           logger.info { 'Uncompressing the file...' }
           #TODO: this could be improved by only uncompressing the XML, then parsing
           # it to get the node_lookup table and then uncompressing each entry to its
           # final destination
-          Zip::File.foreach(package) do |entry|
-            path = Rails.root.join('tmp', 'zip', entry.name)
-            FileUtils.mkdir_p(File.dirname(path))
-            entry.extract(path)
-            logger.info { "\t#{entry.name}" }
+          Dir.chdir(temporary_dir) do
+            Zip::File.foreach(package) do |entry|
+              path = temporary_dir.join(entry.name)
+              FileUtils.mkdir_p(File.dirname(path))
+              entry.extract
+              logger.info { "\t#{entry.name}" }
+            end
           end
           logger.info { 'Done.' }
 
