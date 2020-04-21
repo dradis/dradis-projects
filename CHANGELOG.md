@@ -1,3 +1,7 @@
+## Dradis Framework 3.17 (XXX, 2020) ##
+
+*  Extend project upload/import to handle issue states.
+
 ## Dradis Framework 3.16 (February, 2020) ##
 
 *  No changes
