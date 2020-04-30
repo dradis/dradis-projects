@@ -71,8 +71,14 @@ module Dradis::Plugins::Projects::Upload::V1
         issue.author   = xml_issue.at_xpath('author').text.strip
         issue.text     = xml_issue.at_xpath('text').text
         issue.node     = project.issue_library
-        issue.state    = xml_issue.at_xpath('state')&.text || @default_issue_state
         issue.category = Category.issue
+
+        if xml_issue.at_xpath('state')
+          issue.state = xml_issue.at_xpath('state').text
+        else
+          issue.state = @default_issue_state
+          logger.info { "No issue state detected in template. Using default issue state: #{@default_issue_state} instead." }
+        end
 
         return false unless validate_and_save(issue)
 
