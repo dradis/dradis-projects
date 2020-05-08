@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><dradis-template version="3"><nodes><node><id>3</id><label>Uploaded files</label><parent-id/><position>0</position><properties><![CDATA[{
+}]]></properties><type-id>0</type-id><notes></notes><evidence></evidence><activities></activities></node></nodes><issues><issue><id>10</id><author>admin@securityroots.com</author><state>invalidstate</state><text><![CDATA[#[Title]#
+Issue state 1
+
+#[CVSSv3.BaseScore]#
+3.0
+
+#[CVSSv3Vector]#
+test
+
+#[Type]#
+Internal
+
+#[Description]#
+Multiple
+
+#[Solution]#
+Hello World
+
+#[References]#
+]]></text><activities><activity><action>create</action><user_email>admin@securityroots.com</user_email><created_at>1587458407</created_at></activity></activities><comments></comments></issue><issue><id>11</id><author>admin@securityroots.com</author><state>invalidstate</state><text><![CDATA[#[Title]#
+Issue State 2
+
+#[CVSSv3.BaseScore]#
+3.0
+
+#[CVSSv3Vector]#
+test
+
+#[Type]#
+Internal
+
+#[Description]#
+Multiple
+
+#[Solution]#
+Hello World
+
+#[References]#
+]]></text><activities><activity><action>create</action><user_email>admin@securityroots.com</user_email><created_at>1587458419</created_at></activity></activities><comments></comments></issue><issue><id>12</id><author>admin@securityroots.com</author><state>invalidstate</state><text><![CDATA[#[Title]#
+Issue State 0
+
+#[CVSSv3.BaseScore]#
+3.0
+
+#[CVSSv3Vector]#
+test
+
+#[Type]#
+Internal
+
+#[Description]#
+Multiple
+
+#[Solution]#
+Hello World
+
+#[References]#
+]]></text><activities><activity><action>create</action><user_email>admin@securityroots.com</user_email><created_at>1587458430</created_at></activity></activities><comments></comments></issue></issues><methodologies></methodologies><categories><category><id>1</id><name>Issue description</name></category></categories><tags></tags></dradis-template>

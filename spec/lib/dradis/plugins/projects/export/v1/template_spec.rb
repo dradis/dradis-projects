@@ -1,5 +1,8 @@
 require 'rails_helper'
 
+# To run, execute from Dradis main app folder:
+#   bin/rspec [dradis-projects path]/<file_path>
+
 describe Dradis::Plugins::Projects::Export::V2::Template do
   let(:project) { create(:project) }
   let(:user) { create(:user) }

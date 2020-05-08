@@ -1,5 +1,8 @@
 require 'rails_helper'
 
+# To run, execute from Dradis main app folder:
+#   bin/rspec [dradis-projects path]/<file_path>
+
 describe Dradis::Plugins::Projects::Upload::V1::Template::Importer do
 
   let(:project) { create(:project) }
@@ -44,7 +47,7 @@ describe Dradis::Plugins::Projects::Upload::V1::Template::Importer do
       it 'uploads the issues with the published state' do
         importer.import(file: file_path)
 
-        expect(project.issues.first.state).to eq('published')
+        expect(project.issues.pluck(:state)).to match_array(['published', 'published', 'published'])
       end
     end
 
@@ -56,7 +59,19 @@ describe Dradis::Plugins::Projects::Upload::V1::Template::Importer do
       it 'uploads the issues with the states' do
         importer.import(file: file_path)
 
-        expect(project.issues.first.state).to eq('review')
+        expect(project.issues.pluck(:state)).to match_array(['draft', 'review', 'published'])
+      end
+    end
+
+    context 'template with invalid states' do
+      let(:file_path) {
+        File.join(File.dirname(__FILE__), '../../../../../../', 'fixtures', 'files', 'with_invalid_states.xml')
+      }
+
+      it 'uploads the issues with the states' do
+        importer.import(file: file_path)
+
+        expect(project.issues.pluck(:state)).to match_array(['published', 'published', 'published'])
       end
     end
   end

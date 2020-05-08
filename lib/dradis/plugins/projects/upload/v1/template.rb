@@ -74,7 +74,14 @@ module Dradis::Plugins::Projects::Upload::V1
         issue.category = Category.issue
 
         if xml_issue.at_xpath('state')
-          issue.state = xml_issue.at_xpath('state').text
+          state = xml_issue.at_xpath('state').text
+          issue.state =
+            if Issue.states.keys.include?(state)
+              state
+            else
+              logger.info { "Invalid issue state detected. Using default issue state: #{@default_issue_state} instead." }
+              @default_issue_state
+            end
         else
           issue.state = @default_issue_state
           logger.info { "No issue state detected in template. Using default issue state: #{@default_issue_state} instead." }
