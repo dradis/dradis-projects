@@ -61,6 +61,7 @@ module Dradis::Plugins::Projects::Export::V1
           issues_builder.issue do |issue_builder|
             issue_builder.id(issue.id)
             issue_builder.author(issue.author)
+            issue_builder.state(issue.state)
             issue_builder.text do
               issue_builder.cdata!(issue.text)
             end
