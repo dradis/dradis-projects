@@ -79,12 +79,12 @@ module Dradis::Plugins::Projects::Upload::V1
             if Issue.states.keys.include?(state)
               state
             else
-              logger.info { "Invalid issue state detected. Using default issue state: #{@default_issue_state} instead." }
-              @default_issue_state
+              logger.info { "Invalid issue state detected. Using default issue state: #{default_issue_state} instead." }
+              default_issue_state
             end
         else
-          issue.state = @default_issue_state
-          logger.info { "No issue state detected in template. Using default issue state: #{@default_issue_state} instead." }
+          issue.state = default_issue_state
+          logger.info { "No issue state detected in template. Using default issue state: #{default_issue_state} instead." }
         end
 
         return false unless validate_and_save(issue)
