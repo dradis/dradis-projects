@@ -11,7 +11,7 @@ module Dradis::Plugins::Projects::Export::V2
             comment_builder.content do
               comment_builder.cdata!(comment.content)
             end
-            comment_builder.author(comment.user.email)
+            comment_builder.author(comment.user&.email)
             comment_builder.created_at(comment.created_at.to_i)
           end
         end
