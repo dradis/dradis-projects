@@ -1,3 +1,7 @@
+## Dradis Framework 3.20 (XXX, 2020) ##
+
+*  Fix exporting projects with comments by deleted users.
+
 ## Dradis Framework 3.19 (September, 2020) ##
 
 *  No changes
