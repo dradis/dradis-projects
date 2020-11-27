@@ -13,17 +13,26 @@ module Dradis::Plugins::Projects::Upload::V2
             commentable_type: commentable.class.to_s,
             content: xml_comment.at_xpath('content').text,
             created_at: Time.at(xml_comment.at_xpath('created_at').text.to_i),
-            user_id: user_id_for_email(author_email)
+            user_id: user_id_for_comments(author_email)
           )
 
-          if comment.user.email != author_email
+          if comment.user.nil?
             comment.content = comment.content +
               "\n\nOriginal author not available in this Dradis instance: "\
               "#{author_email}."
           end
 
-          return false unless validate_and_save(comment)
+          unless validate_and_save(comment)
+            logger.info { "comment errors: #{comment.inspect}" }
+            return false
+          end
         end
+      end
+
+      def user_id_for_comments(author_email)
+        user_id_for_email(author_email)
+
+        @users[author_email] || nil
       end
     end
   end
