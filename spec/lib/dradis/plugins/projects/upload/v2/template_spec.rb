@@ -41,5 +41,17 @@ describe Dradis::Plugins::Projects::Upload::V2::Template::Importer do
       evidence = node.evidence.first
       expect(evidence.comments.first.content).to include('A comment on an evidence')
     end
+
+    it 'imports comments without user' do
+      issue = project.issues.first
+      note = node.notes.first
+      evidence = node.evidence.first
+
+      aggregate_failures do
+        expect(issue.comments.first.user).to be_nil
+        expect(note.comments.first.user).to be_nil
+        expect(evidence.comments.first.user).to be_nil
+      end
+    end
   end
 end
