@@ -32,7 +32,7 @@ module Dradis::Plugins::Projects::Upload::V2
       def user_id_for_comments(author_email)
         user_id_for_email(author_email)
 
-        @users[author_email] || nil
+        @users[author_email]
       end
     end
   end
