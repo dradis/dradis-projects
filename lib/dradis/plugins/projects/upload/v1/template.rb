@@ -3,7 +3,7 @@ module Dradis::Plugins::Projects::Upload::V1
 
     class Importer < Dradis::Plugins::Projects::Upload::Template::Importer
 
-      attr_accessor :attachment_notes, :logger, :pending_changes
+      attr_accessor :attachment_notes, :logger, :pending_changes, :users
 
       ATTACHMENT_URL = %r{^!(/[a-z]+)?/(?:projects/\d+/)?nodes/(\d+)/attachments/(.+)!$}
 
@@ -397,12 +397,15 @@ module Dradis::Plugins::Projects::Upload::V1
       # Cache users to cut down on excess SQL requests
       def user_id_for_email(email)
         return @default_user_id if email.blank?
+        users[email] || @default_user_id
+      end
+
+      def users
         @users ||= begin
           User.select([:id, :email]).all.each_with_object({}) do |user, hash|
             hash[user.email] = user.id
           end
         end
-        @users[email] || @default_user_id
       end
 
       def validate_and_save(instance)
