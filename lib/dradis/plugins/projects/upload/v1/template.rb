@@ -394,12 +394,11 @@ module Dradis::Plugins::Projects::Upload::V1
         end
       end
 
-      # Cache users to cut down on excess SQL requests
       def user_id_for_email(email)
-        return @default_user_id if email.blank?
         users[email] || @default_user_id
       end
 
+      # Cache users to cut down on excess SQL requests
       def users
         @users ||= begin
           User.select([:id, :email]).all.each_with_object({}) do |user, hash|
