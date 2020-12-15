@@ -1,7 +1,6 @@
 <% plugin_name = Dradis::Plugins::Projects::Engine.plugin_name %>
 
 <%= content_tag :div, id: "plugin-#{plugin_name}", class: 'tab-pane fade' do %>
-
   <%= form_tag project_export_manager_path(current_project), target: '_blank' do %>
     <%= hidden_field_tag :plugin, plugin_name %>
 
