@@ -15,10 +15,10 @@ class ExportTasks < Thor
 
     unless template_path =~ /\.xml\z/
       date = DateTime.now.strftime("%Y-%m-%d")
-      base_template_filename = "dradis-template_#{date}.xml"
+      base_filename = "dradis-template_#{date}.xml"
 
       template_filename = NamingService.name_file(
-        original_filename: base_template_filename,
+        original_filename: base_filename,
         pathname: Pathname.new(template_path)
       )
 
@@ -50,10 +50,10 @@ class ExportTasks < Thor
 
     unless package_path.to_s =~ /\.zip\z/
       date = DateTime.now.strftime("%Y-%m-%d")
-      base_package_filename = "dradis-export_#{date}.zip"
+      base_filename = "dradis-export_#{date}.zip"
 
       package_filename = NamingService.name_file(
-        original_filename: base_package_filename,
+        original_filename: base_filename,
         pathname: Pathname.new(package_path)
       )
 
