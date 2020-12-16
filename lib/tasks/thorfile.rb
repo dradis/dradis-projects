@@ -14,12 +14,15 @@ class ExportTasks < Thor
     FileUtils.mkdir_p(template_path) unless File.exist?(template_path)
 
     unless template_path =~ /\.xml\z/
-      date          = DateTime.now.strftime("%Y-%m-%d")
-      sequence      = Dir.glob(File.join(template_path, "dradis-template_#{date}_*.xml")).collect do |a|
-                        a.match(/_([0-9]+)\.xml\z/)[1].to_i
-                      end.max || 0
+      date = DateTime.now.strftime("%Y-%m-%d")
+      base_template_filename = "dradis-template_#{date}.xml"
 
-      template_path = File.join(template_path, "dradis-template_#{date}_#{sequence + 1}.xml")
+      template_filename = NamingService.name_file(
+        original_filename: base_template_filename,
+        pathname: Pathname.new(template_path)
+      )
+
+      template_path = File.join(template_path, template_filename)
     end
 
     detect_and_set_project_scope
@@ -46,9 +49,15 @@ class ExportTasks < Thor
     FileUtils.mkdir_p(package_path) unless File.exist?(package_path)
 
     unless package_path.to_s =~ /\.zip\z/
-      date      = DateTime.now.strftime("%Y-%m-%d")
-      sequence  = Dir.glob(File.join(package_path, "dradis-export_#{date}_*.zip")).collect { |a| a.match(/_([0-9]+)\.zip\z/)[1].to_i }.max || 0
-      package_path = File.join(package_path, "dradis-export_#{date}_#{sequence + 1}.zip")
+      date = DateTime.now.strftime("%Y-%m-%d")
+      base_package_filename = "dradis-export_#{date}.zip"
+
+      package_filename = NamingService.name_file(
+        original_filename: base_package_filename,
+        pathname: Pathname.new(package_path)
+      )
+
+      package_path = File.join(package_path, package_filename)
     end
 
     detect_and_set_project_scope
