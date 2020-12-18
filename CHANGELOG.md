@@ -1,6 +1,7 @@
-## Dradis Framework 3.20 (XXX, 2020) ##
+## Dradis Framework 3.20 (December, 2020) ##
 
 *  Fix exporting projects with comments by deleted users.
+*  Use NamingService to build export filename.
 
 ## Dradis Framework 3.19 (September, 2020) ##
 
