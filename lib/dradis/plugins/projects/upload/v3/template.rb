@@ -70,12 +70,11 @@ module Dradis::Plugins::Projects::Upload::V3
       # Private: Restore Board, List and Card information from the project
       # template.
       def parse_methodologies(template)
-        if template_version == 1
-          # Restore Board from old xml methodology format
-          process_v1_methodologies(template)
-        else
-          process_v2_methodologies(template)
-        end
+        # old methodologies format
+        process_v1_methodologies(template)
+
+        # new methodologies format
+        process_v2_methodologies(template)
       end
 
       # Private:  For each XML card block, we're creating a new Card instance,
