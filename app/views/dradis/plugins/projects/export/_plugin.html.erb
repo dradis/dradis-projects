@@ -1,17 +1,18 @@
-<% plugin_name = Dradis::Plugins::Projects::Engine.plugin_name %>
-
-<%= content_tag :div, id: "plugin-#{plugin_name}", class: 'tab-pane fade' do %>
+<%= content_tag :div, id: 'plugin-projects', class: 'tab-pane fade' do %>
   <%= form_tag project_export_manager_path(current_project), target: '_blank' do %>
-    <%= hidden_field_tag :plugin, plugin_name %>
+    <%= hidden_field_tag :plugin, 'projects' %>
 
     <h4 class="header-underline">Choose an export option</h4>
 
-    <% Dradis::Plugins::Projects::Engine.routes.named_routes.names.each_with_index do |route, index| %>
-      <div class="custom-control custom-radio">
-        <%= radio_button_tag :route, route, index == 0, :class => 'custom-control-input' %>
-        <label class="custom-control-label" for="route_<%= route %>"><%= route.to_s.humanize.titleize %></label>
-      </div>
-    <% end %>
+    <div class="custom-control custom-radio">
+      <%= radio_button_tag :route, :package, true, :class => 'custom-control-input' %>
+      <label class="custom-control-label" for='route_package'>Package</label>
+    </div>
+
+    <div class="custom-control custom-radio">
+      <%= radio_button_tag :route, :template, false, :class => 'custom-control-input' %>
+      <label class="custom-control-label" for='route_template'>Template</label>
+    </div>
 
     <button id="export-button" class="btn btn-lg btn-primary mt-4">Export</button>
   <% end %>
