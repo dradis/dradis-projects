@@ -1,0 +1,19 @@
+<%= content_tag :div, id: 'plugin-projects', class: 'tab-pane fade' do %>
+  <%= form_tag project_export_manager_path(current_project), target: '_blank' do %>
+    <%= hidden_field_tag :plugin, 'projects' %>
+
+    <h4 class="header-underline">Choose an export option</h4>
+
+    <div class="custom-control custom-radio">
+      <%= radio_button_tag :route, :package, true, :class => 'custom-control-input' %>
+      <label class="custom-control-label" for='route_package'>Package</label>
+    </div>
+
+    <div class="custom-control custom-radio">
+      <%= radio_button_tag :route, :template, false, :class => 'custom-control-input' %>
+      <label class="custom-control-label" for='route_template'>Template</label>
+    </div>
+
+    <button id="export-button" class="btn btn-lg btn-primary mt-4">Export</button>
+  <% end %>
+<% end%>
