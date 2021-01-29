@@ -1,8 +1,10 @@
 module Dradis
   module Plugins
     module Projects
-      module Export; end
-      module Upload; end
+      module Export
+      end
+      module Upload
+      end
     end
   end
 end
