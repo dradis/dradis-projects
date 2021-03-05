@@ -13,7 +13,7 @@ module Dradis::Plugins::Projects::Export::V3
           node_id =
             board.node == project.methodology_library ? nil : board.node_id
 
-          board.to_template(methodologies_builder, includes: [:activities, :assignees, :comments], version: VERSION)
+          board.to_xml(methodologies_builder, includes: [:activities, :assignees, :comments], version: VERSION)
         end
       end
     end
