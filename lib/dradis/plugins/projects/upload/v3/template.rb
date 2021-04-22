@@ -129,12 +129,8 @@ module Dradis::Plugins::Projects::Upload::V3
 
         template.xpath('dradis-template/methodologies/board').each do |xml_board|
           xml_node_id = xml_board.at_xpath('node_id').try(:text)
-          node_id =
-            if xml_node_id.present?
-              lookup_table[:nodes][xml_node_id]
-            else
-              project.methodology_library.id
-            end
+
+          node_id = lookup_table[:nodes][xml_node_id] || project.methodology_library.id
 
           board = content_service.create_board(
             name: xml_board.at_xpath('name').text,
