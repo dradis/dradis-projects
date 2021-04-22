@@ -10,9 +10,6 @@ module Dradis::Plugins::Projects::Export::V3
       builder.methodologies do |methodologies_builder|
 
         boards.each do |board|
-          node_id =
-            board.node == project.methodology_library ? nil : board.node_id
-
           board.to_xml(methodologies_builder, includes: [:activities, :assignees, :comments], version: VERSION)
         end
       end
