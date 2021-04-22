@@ -1,3 +1,7 @@
+## Dradis Framework X.XX (MMM, 2021) ##
+
+*  Fix importing boards from methodology library
+
 ## Dradis Framework 3.22 (April, 2021) ##
 
 *  No changes
