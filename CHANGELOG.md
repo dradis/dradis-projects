@@ -1,3 +1,6 @@
+v4.1.1 (November 2021)
+  - Loosen dradis-plugins version requirement
+
 v4.1.0 (November 2021)
   - No changes
 
