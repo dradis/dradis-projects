@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dradis-template version="1">
+  <nodes>
+    <node>
+      <id>../../../../../../tmp</id>
+      <label>Node 1</label>
+      <parent-id/>
+      <position>0</position>
+      <properties><![CDATA[{
+}]]></properties>
+      <type-id>1</type-id>
+    </node>
+  </nodes>
+</dradis-template>
