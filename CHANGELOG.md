@@ -1,4 +1,4 @@
-v4.1.2 (December 2021)
+v4.1.2.1 (December 2021)
   - Security Fixes:
     - High: Authenticated author path traversal
 
