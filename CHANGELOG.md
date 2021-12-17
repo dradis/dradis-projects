@@ -1,3 +1,7 @@
+v4.1.2 (December 2021)
+  - Security Fixes:
+    - High: Authenticated author path traversal
+
 v4.1.1 (November 2021)
   - Loosen dradis-plugins version requirement
 
