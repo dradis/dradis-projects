@@ -49,15 +49,15 @@ module Dradis::Plugins::Projects::Upload
           logger.info { 'Moving attachments to their final destinations...' }
           lookup_table[:nodes].each do |oldid, newid|
             tmp_dir = Rails.root.join('tmp', 'zip')
-            old_attachments_dir = File.expand_path(tmp_dir.join(oldid))
+            old_attachments_dir = File.expand_path(tmp_dir.join(oldid.to_s))
 
             # Ensure once the path is expanded it's still within the expected
             # tmp directory to prevent unauthorized access to other dirs
-            next unless old_attachments_dir.starts_with?(tmp_dir) && File.directory?(old_attachments_dir)
+            next unless old_attachments_dir.starts_with?(tmp_dir.to_s) && File.directory?(old_attachments_dir)
 
             FileUtils.mkdir_p Attachment.pwd.join(newid.to_s)
 
-            Dir.glob(old_attachments_dir.join('*')).each do |attachment|
+            Dir.glob(Pathname.new(old_attachments_dir).join('*')).each do |attachment|
               FileUtils.mv(attachment, Attachment.pwd.join(newid.to_s))
             end
           end
