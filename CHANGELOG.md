@@ -1,3 +1,7 @@
+v4.1.3 (December 2021)
+  - Ensure casting expected blank strings to integers doesn't have us looking
+    for records with id 0
+
 v4.1.2 (December 2021)
   - Security Fixes:
     - High: Authenticated author path traversal
