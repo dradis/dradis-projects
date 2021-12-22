@@ -105,7 +105,7 @@ module Dradis::Plugins::Projects::Upload::V1
           logger.info { "Adjusting screenshot URLs: #{item.class.name} ##{item.id}" }
 
           new_text = item.send(text_attr).gsub(ATTACHMENT_URL) do |_|
-            "!%s/projects/%d/nodes/%d/attachments/%s!" % [$1, project.id, lookup_table[:nodes][$2], $3]
+            "!%s/projects/%d/nodes/%d/attachments/%s!" % [$1, project.id, lookup_table[:nodes][$2.to_i], $3]
           end
           item.send(text_attr.to_s + "=", new_text)
 
@@ -121,7 +121,7 @@ module Dradis::Plugins::Projects::Upload::V1
           evidence.issue_id = lookup_table[:issues][evidence.issue_id.to_s]
 
           new_content = evidence.content.gsub(ATTACHMENT_URL) do |_|
-            "!%s/projects/%d/nodes/%d/attachments/%s!" % [$1, project.id, lookup_table[:nodes][$2], $3]
+            "!%s/projects/%d/nodes/%d/attachments/%s!" % [$1, project.id, lookup_table[:nodes][$2.to_i], $3]
           end
           evidence.content = new_content
 
@@ -289,7 +289,12 @@ module Dradis::Plugins::Projects::Upload::V1
           node = parse_node(xml_node)
 
           # keep track of reassigned ids
-          lookup_table[:nodes][xml_node.at_xpath('id').text.strip] = node.id
+          # Convert the id to an integer as it has no place being a string, or
+          # directory path. We later use this ID to build a directory structure
+          # to place attachments and without validation opens the potential for
+          # path traversal.
+          node_original_id = Integer(xml_node.at_xpath('id').text.strip)
+          lookup_table[:nodes][node_original_id] = node.id
         end
 
         logger.info { 'Done.' }

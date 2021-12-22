@@ -131,7 +131,7 @@ module Dradis::Plugins::Projects::Upload::V3
           xml_node_id = xml_board.at_xpath('node_id').try(:text)
           node_id =
             if xml_node_id.present?
-              lookup_table[:nodes][xml_node_id]
+              lookup_table[:nodes][xml_node_id.to_i]
             else
               project.methodology_library.id
             end
