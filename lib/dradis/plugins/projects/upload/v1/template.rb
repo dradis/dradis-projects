@@ -118,7 +118,7 @@ module Dradis::Plugins::Projects::Upload::V1
       def finalize_evidence
         pending_changes[:evidence].each_with_index do |evidence, i|
           logger.info { "Setting issue_id for evidence" }
-          evidence.issue_id = lookup_table[:issues][evidence.issue_id.to_s]
+          evidence.issue_id = lookup_table[:issues][evidence.issue_id]
 
           new_content = evidence.content.gsub(ATTACHMENT_URL) do |_|
             "!%s/projects/%d/nodes/%d/attachments/%s!" % [$1, project.id, lookup_table[:nodes][$2.to_i], $3]
