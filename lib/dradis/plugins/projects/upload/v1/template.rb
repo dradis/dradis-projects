@@ -141,7 +141,7 @@ module Dradis::Plugins::Projects::Upload::V1
       def finalize_nodes
         pending_changes[:orphan_nodes].each do |node|
           logger.info { "Finding parent for orphaned node: #{node.label}. Former parent was #{node.parent_id}" }
-          node.parent_id = lookup_table[:nodes][node.parent_id.to_s]
+          node.parent_id = lookup_table[:nodes][node.parent_id]
           raise "Couldn't save node parent for Node ##{node.id}" unless validate_and_save(node)
         end
       end
