@@ -153,7 +153,7 @@ module Dradis::Plugins::Projects::Upload::V1
         logger.info { 'Processing Categories...' }
 
         template.xpath('dradis-template/categories/category').each do |xml_category|
-          old_id   = xml_category.at_xpath('id').text.strip
+          old_id   = Integer(xml_category.at_xpath('id').text.strip)
           name     = xml_category.at_xpath('name').text.strip
           category = nil
 
@@ -183,7 +183,7 @@ module Dradis::Plugins::Projects::Upload::V1
             pending_changes[:attachment_notes] << issue
           end
 
-          old_id = xml_issue.at_xpath('id').text.strip
+          old_id = Integer(xml_issue.at_xpath('id').text.strip)
           lookup_table[:issues][old_id] = issue.id
           logger.info{ "New issue detected: #{issue.title}" }
         end
