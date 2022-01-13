@@ -41,7 +41,7 @@ module Dradis::Plugins::Projects::Upload::V3
 
         # Fix the :previous_id with the new card IDs
         pending_changes[:cards].each do |card|
-          card.previous_id = lookup_table[:cards][card.previous_id]
+          card.previous_id = lookup_table[:cards][card.previous_id.to_i]
           raise "Couldn't save card's position" unless validate_and_save(card)
         end
 

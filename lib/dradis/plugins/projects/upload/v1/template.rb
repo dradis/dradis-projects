@@ -380,7 +380,7 @@ module Dradis::Plugins::Projects::Upload::V1
 
             new_taggable_id = case taggable_type
                               when 'Note'
-                                lookup_table[:issues][old_taggable_id]
+                                lookup_table[:issues][old_taggable_id.to_i]
                               end
 
             Tagging.create! tag: tag,
