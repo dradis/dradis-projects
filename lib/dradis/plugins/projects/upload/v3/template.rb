@@ -60,7 +60,7 @@ module Dradis::Plugins::Projects::Upload::V3
 
         # Fix the :previous_id with the new card IDs
         pending_changes[:lists].each do |list|
-          list.previous_id = lookup_table[:lists][list.previous_id]
+          list.previous_id = lookup_table[:lists][list.previous_id].to_i
           raise "Couldn't save list's position" unless validate_and_save(list)
         end
 
@@ -94,7 +94,7 @@ module Dradis::Plugins::Projects::Upload::V3
         card = list.cards.create name: xml_card.at_xpath('name').text,
           description: xml_card.at_xpath('description').text,
           due_date: due_date,
-          previous_id: xml_card.at_xpath('previous_id').text
+          previous_id: xml_card.at_xpath('previous_id').text.to_i
 
         xml_card.xpath('activities/activity').each do |xml_activity|
           raise "Couldn't create activity for Card ##{card.id}" unless create_activity(card, xml_activity)
@@ -143,7 +143,7 @@ module Dradis::Plugins::Projects::Upload::V3
 
           xml_board.xpath('./list').each do |xml_list|
             list = board.lists.create name: xml_list.at_xpath('name').text,
-              previous_id: xml_list.at_xpath('previous_id').text
+              previous_id: xml_list.at_xpath('previous_id').text.to_i
 
             lookup_table[:lists][xml_list.at_xpath('id').text.to_i] = list.id
             pending_changes[:lists] << list

@@ -332,7 +332,7 @@ module Dradis::Plugins::Projects::Upload::V1
 
           if xml_note.at_xpath('author') != nil
             old_id = xml_note.at_xpath('category-id').text.strip
-            new_id = lookup_table[:categories][old_id]
+            new_id = lookup_table[:categories][old_id.to_i]
 
             created_at = xml_note.at_xpath('created-at')
             updated_at = xml_note.at_xpath('updated-at')
