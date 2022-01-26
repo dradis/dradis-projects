@@ -145,9 +145,9 @@ module Dradis::Plugins::Projects::Upload::V3
           xml_board.xpath('./list').each do |xml_list|
             list = board.lists.create name: xml_list.at_xpath('name').text,
               previous_id: Integer(xml_list.at_xpath('previous_id').text)
-            old_id = Integer(xml_list.at_xpath('id').text)
+            xml_id = Integer(xml_list.at_xpath('id').text)
 
-            lookup_table[:lists][old_id] = list.id
+            lookup_table[:lists][xml_id] = list.id
             pending_changes[:lists] << list
 
             xml_list.xpath('./card').each do |xml_card|
