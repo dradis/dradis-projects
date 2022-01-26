@@ -331,8 +331,8 @@ module Dradis::Plugins::Projects::Upload::V1
         xml_node.xpath('notes/note').each do |xml_note|
 
           if xml_note.at_xpath('author') != nil
-            old_id = xml_note.at_xpath('category-id').text.strip
-            new_id = lookup_table[:categories][old_id.to_i]
+            old_id = Integer(xml_note.at_xpath('category-id').text.strip)
+            new_id = lookup_table[:categories][old_id]
 
             created_at = xml_note.at_xpath('created-at')
             updated_at = xml_note.at_xpath('updated-at')
@@ -375,12 +375,12 @@ module Dradis::Plugins::Projects::Upload::V1
           logger.info { "New tag detected: #{name}" }
 
           xml_tag.xpath('./taggings/tagging').each do |xml_tagging|
-            old_taggable_id = xml_tagging.at_xpath('taggable-id').text()
+            old_taggable_id = Integer(xml_tagging.at_xpath('taggable-id').text())
             taggable_type   = xml_tagging.at_xpath('taggable-type').text()
 
             new_taggable_id = case taggable_type
                               when 'Note'
-                                lookup_table[:issues][old_taggable_id.to_i]
+                                lookup_table[:issues][old_taggable_id]
                               end
 
             Tagging.create! tag: tag,
