@@ -1,3 +1,17 @@
+[v#.#.#] ([month] [YYYY])
+  - [future tense verb] [feature]
+  - Upgraded gems:
+    - [gem]
+  - Bugs fixes:
+    - [future tense verb] [bug fix]
+    - Fixes missing parent nodes during template and package imports
+    - Bug tracker items:
+      - [item]
+  - Security Fixes:
+    - High: (Authenticated|Unauthenticated) (admin|author|contributor) [vulnerability description]
+    - Medium: (Authenticated|Unauthenticated) (admin|author|contributor) [vulnerability description]
+    - Low: (Authenticated|Unauthenticated) (admin|author|contributor) [vulnerability description]
+
 v4.1.2.1 (December 2021)
   - Security Fixes:
     - High: Authenticated author path traversal

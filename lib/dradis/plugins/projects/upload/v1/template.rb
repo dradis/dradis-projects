@@ -118,7 +118,7 @@ module Dradis::Plugins::Projects::Upload::V1
       def finalize_evidence
         pending_changes[:evidence].each_with_index do |evidence, i|
           logger.info { "Setting issue_id for evidence" }
-          evidence.issue_id = lookup_table[:issues][evidence.issue_id.to_s]
+          evidence.issue_id = lookup_table[:issues][evidence.issue_id]
 
           new_content = evidence.content.gsub(ATTACHMENT_URL) do |_|
             "!%s/projects/%d/nodes/%d/attachments/%s!" % [$1, project.id, lookup_table[:nodes][$2.to_i], $3]
@@ -141,7 +141,7 @@ module Dradis::Plugins::Projects::Upload::V1
       def finalize_nodes
         pending_changes[:orphan_nodes].each do |node|
           logger.info { "Finding parent for orphaned node: #{node.label}. Former parent was #{node.parent_id}" }
-          node.parent_id = lookup_table[:nodes][node.parent_id.to_s]
+          node.parent_id = lookup_table[:nodes][node.parent_id]
           raise "Couldn't save node parent for Node ##{node.id}" unless validate_and_save(node)
         end
       end
@@ -153,7 +153,7 @@ module Dradis::Plugins::Projects::Upload::V1
         logger.info { 'Processing Categories...' }
 
         template.xpath('dradis-template/categories/category').each do |xml_category|
-          old_id   = xml_category.at_xpath('id').text.strip
+          old_id   = Integer(xml_category.at_xpath('id').text.strip)
           name     = xml_category.at_xpath('name').text.strip
           category = nil
 
@@ -183,7 +183,7 @@ module Dradis::Plugins::Projects::Upload::V1
             pending_changes[:attachment_notes] << issue
           end
 
-          old_id = xml_issue.at_xpath('id').text.strip
+          old_id = Integer(xml_issue.at_xpath('id').text.strip)
           lookup_table[:issues][old_id] = issue.id
           logger.info{ "New issue detected: #{issue.title}" }
         end
@@ -331,7 +331,7 @@ module Dradis::Plugins::Projects::Upload::V1
         xml_node.xpath('notes/note').each do |xml_note|
 
           if xml_note.at_xpath('author') != nil
-            old_id = xml_note.at_xpath('category-id').text.strip
+            old_id = Integer(xml_note.at_xpath('category-id').text.strip)
             new_id = lookup_table[:categories][old_id]
 
             created_at = xml_note.at_xpath('created-at')
@@ -375,7 +375,7 @@ module Dradis::Plugins::Projects::Upload::V1
           logger.info { "New tag detected: #{name}" }
 
           xml_tag.xpath('./taggings/tagging').each do |xml_tagging|
-            old_taggable_id = xml_tagging.at_xpath('taggable-id').text()
+            old_taggable_id = Integer(xml_tagging.at_xpath('taggable-id').text())
             taggable_type   = xml_tagging.at_xpath('taggable-type').text()
 
             new_taggable_id = case taggable_type
