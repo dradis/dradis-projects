@@ -5,6 +5,7 @@
   - Bugs fixes:
     - [future tense verb] [bug fix]
     - Fixes missing parent nodes during template and package imports
+    - Fixes missing nodes for attachments during template and package imports
     - Bug tracker items:
       - [item]
   - Security Fixes:
