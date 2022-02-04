@@ -104,14 +104,7 @@ module Dradis::Plugins::Projects::Upload::V1
 
           logger.info { "Adjusting screenshot URLs: #{item.class.name} ##{item.id}" }
 
-          new_text = item.send(text_attr).gsub(ATTACHMENT_URL) do |attachment|
-            if lookup_table[:nodes][$2.to_i]
-              "!%s/projects/%d/nodes/%d/attachments/%s!" % [$1, project.id, lookup_table[:nodes][$2.to_i], $3]
-            else
-              logger.error { "Invalid attachment found: #{attachment}" }
-              attachment
-            end
-          end
+          new_text = update_attachment_references(item.send(text_attr))
           item.send(text_attr.to_s + "=", new_text)
 
           raise "Couldn't save note attachment URL for #{item.class.name} ##{item.id}" unless validate_and_save(item)
@@ -125,15 +118,7 @@ module Dradis::Plugins::Projects::Upload::V1
           logger.info { "Setting issue_id for evidence" }
           evidence.issue_id = lookup_table[:issues][evidence.issue_id]
 
-          new_content = evidence.content.gsub(ATTACHMENT_URL) do |attachment|
-            if lookup_table[:nodes][$2.to_i]
-              "!%s/projects/%d/nodes/%d/attachments/%s!" % [$1, project.id, lookup_table[:nodes][$2.to_i], $3]
-            else
-              logger.error { "Invalid attachment found: #{attachment}" }
-              attachment
-            end
-          end
-          evidence.content = new_content
+          evidence.content = update_attachment_references(evidence.content)
 
           raise "Couldn't save Evidence :issue_id / attachment URL Evidence ##{evidence.id}" unless validate_and_save(evidence)
 
@@ -406,6 +391,18 @@ module Dradis::Plugins::Projects::Upload::V1
           activity.user = email
         else
           activity.user_id = user_id_for_email(email)
+        end
+      end
+
+      def update_attachment_references(string)
+        string.gsub(ATTACHMENT_URL) do |attachment|
+          node_id = lookup_table[:nodes][$2.to_i]
+          if node_id
+            "!%s/projects/%d/nodes/%d/attachments/%s!" % [$1, project.id, node_id, $3]
+          else
+            logger.error { "Invalid attachment found: #{attachment}" }
+            attachment
+          end
         end
       end
 
