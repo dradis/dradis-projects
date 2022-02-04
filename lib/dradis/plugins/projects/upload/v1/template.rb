@@ -104,8 +104,13 @@ module Dradis::Plugins::Projects::Upload::V1
 
           logger.info { "Adjusting screenshot URLs: #{item.class.name} ##{item.id}" }
 
-          new_text = item.send(text_attr).gsub(ATTACHMENT_URL) do |_|
-            "!%s/projects/%d/nodes/%d/attachments/%s!" % [$1, project.id, lookup_table[:nodes][$2.to_i] || $2.to_i, $3]
+          new_text = item.send(text_attr).gsub(ATTACHMENT_URL) do |attachment|
+            if lookup_table[:nodes][$2.to_i]
+              "!%s/projects/%d/nodes/%d/attachments/%s!" % [$1, project.id, lookup_table[:nodes][$2.to_i], $3]
+            else
+              logger.error { "Invalid attachment found: #{attachment}" }
+              attachment
+            end
           end
           item.send(text_attr.to_s + "=", new_text)
 
@@ -120,8 +125,13 @@ module Dradis::Plugins::Projects::Upload::V1
           logger.info { "Setting issue_id for evidence" }
           evidence.issue_id = lookup_table[:issues][evidence.issue_id]
 
-          new_content = evidence.content.gsub(ATTACHMENT_URL) do |_|
-            "!%s/projects/%d/nodes/%d/attachments/%s!" % [$1, project.id, lookup_table[:nodes][$2.to_i] || $2.to_i, $3]
+          new_content = evidence.content.gsub(ATTACHMENT_URL) do |attachment|
+            if lookup_table[:nodes][$2.to_i]
+              "!%s/projects/%d/nodes/%d/attachments/%s!" % [$1, project.id, lookup_table[:nodes][$2.to_i], $3]
+            else
+              logger.error { "Invalid attachment found: #{attachment}" }
+              attachment
+            end
           end
           evidence.content = new_content
 
