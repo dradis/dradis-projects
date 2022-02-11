@@ -1,5 +1,7 @@
 v4.2.0 (February 2022)
-  - Bugs fixes: Fixes missing parent nodes during template and package imports
+  - Bugs fixes:
+    - Fix missing nodes for attachments during template and package imports
+    - Fix missing parent nodes during template and package imports
 
 v4.1.2.1 (December 2021)
   - Security Fixes:
