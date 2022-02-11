@@ -400,7 +400,7 @@ module Dradis::Plugins::Projects::Upload::V1
           if node_id
             "!%s/projects/%d/nodes/%d/attachments/%s!" % [$1, project.id, node_id, $3]
           else
-            logger.error { "Invalid attachment found: #{attachment}" }
+            logger.error { "The attachment wasn't included in the package: #{attachment}" }
             attachment
           end
         end
