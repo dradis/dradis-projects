@@ -48,4 +48,29 @@ describe Dradis::Plugins::Projects::Upload::V1::Template::Importer do
       expect(importer.import(file: file_path)).to be false
     end
   end
+
+  context 'uploading a template with attachment but missing node' do
+    let(:file_path) do
+      File.join(File.dirname(__FILE__), '../../../../../../', 'fixtures', 'files', 'missing_node.xml')
+    end
+
+    it 'does not modify the attachment' do
+      logger = double('logger')
+      allow(logger).to receive_messages(debug: nil, error: nil, fatal: nil, info: nil)
+      expect(logger).to receive(:error).once
+
+      importer = importer_class::Importer.new(
+        default_user_id: user.id,
+        logger: logger,
+        plugin: importer_class,
+        project_id: project.id
+      )
+
+      importer.import(file: file_path)
+
+      expect(project.issues.first.text).to include(
+        "!/pro/projects/222/nodes/12345/attachments/hello.jpg!"
+      )
+    end
+  end
 end

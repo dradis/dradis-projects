@@ -1,16 +1,7 @@
-[v#.#.#] ([month] [YYYY])
-  - [future tense verb] [feature]
-  - Upgraded gems:
-    - [gem]
+v4.2.0 (February 2022)
   - Bugs fixes:
-    - [future tense verb] [bug fix]
-    - Fixes missing parent nodes during template and package imports
-    - Bug tracker items:
-      - [item]
-  - Security Fixes:
-    - High: (Authenticated|Unauthenticated) (admin|author|contributor) [vulnerability description]
-    - Medium: (Authenticated|Unauthenticated) (admin|author|contributor) [vulnerability description]
-    - Low: (Authenticated|Unauthenticated) (admin|author|contributor) [vulnerability description]
+    - Fix missing nodes for attachments during template and package imports
+    - Fix missing parent nodes during template and package imports
 
 v4.1.2.1 (December 2021)
   - Security Fixes:

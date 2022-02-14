@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dradis-template version="2">
+<nodes><node><id>5</id><label>Uploaded files</label><parent-id/><position>0</position><properties><![CDATA[{}]]></properties><type-id>0</type-id><notes></notes><evidence></evidence><activities></activities></node></nodes>
+<issues><issue><id>2</id><author>admin@securityroots.com</author><text><![CDATA[#[Title]#
+Test Issue
+
+#[Description]#
+!/pro/projects/222/nodes/12345/attachments/hello.jpg!
+
+  ]]></text><activities></activities><comments></comments></issue></issues>
+</dradis-template>
