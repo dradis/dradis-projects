@@ -34,6 +34,13 @@ module Dradis
             Dradis::Plugins::Projects::Upload::Template
           ]
         end
+
+        def self.template_names
+          {
+            Dradis::Plugins::Projects::Upload::Package => {},
+            Dradis::Plugins::Projects::Upload::Template => {}
+          }
+        end
       end
     end
   end
