@@ -12,6 +12,9 @@ module Dradis::Plugins::Projects::Upload
     # In this module you will find the implementation details that enable you to
     # upload a project archive (generated using ProjectExport::Processor::full_project)
     class Importer < Dradis::Plugins::Upload::Importer
+      def self.templates
+        { }
+      end
 
       def import(params={})
         package = params[:file]

@@ -12,6 +12,10 @@ module Dradis::Plugins::Projects::Upload
     class Importer < Dradis::Plugins::Upload::Importer
       attr_accessor :lookup_table, :template_version
 
+      def self.templates
+        { }
+      end
+
       # The import method is invoked by the framework to process a template file
       # that has just been uploaded using the 'Import from file...' dialog.
       #
