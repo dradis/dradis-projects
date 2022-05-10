@@ -9,6 +9,7 @@ module Dradis
   end
 end
 
+require 'dradis/plugins/projects/clone'
 require 'dradis/plugins/projects/engine'
 require 'dradis/plugins/projects/export/package'
 require 'dradis/plugins/projects/export/template'
