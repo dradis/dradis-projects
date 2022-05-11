@@ -36,5 +36,11 @@ describe Dradis::Plugins::Projects::Clone do
       expect(new_project.owners).to eq(project.owners)
       expect(new_project.authors).to eq(project.authors)
     end
+
+    it 'enqueues ProjectCloneJob' do
+      expect {
+        instance.clone!
+      }.to have_enqueued_job(Dradis::Plugins::Projects::ProjectCloneJob)
+    end
   end
 end

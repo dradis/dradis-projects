@@ -1,5 +1,5 @@
 [v#.#.#] ([month] [YYYY])
-  - Add clone feature to copy projects without the need of exporting and exporting
+  - Add clone feature to copy projects without the need of exporting and importing
 
 v4.3.0 (April 2022)
   - No changes
