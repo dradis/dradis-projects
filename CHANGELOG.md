@@ -1,15 +1,8 @@
-v4.3.0 ([month] 2022)
+[v#.#.#] ([month] [YYYY])
   - Provide plugin template mappings (no mappings)
-  - Upgraded gems:
-    - [gem]
-  - Bugs fixes:
-    - [future tense verb] [bug fix]
-    - Bug tracker items:
-      - [item]
-  - Security Fixes:
-    - High: (Authenticated|Unauthenticated) (admin|author|contributor) [vulnerability description]
-    - Medium: (Authenticated|Unauthenticated) (admin|author|contributor) [vulnerability description]
-    - Low: (Authenticated|Unauthenticated) (admin|author|contributor) [vulnerability description]
+
+v4.3.0 (April 2022)
+  - No changes
 
 v4.2.0 (February 2022)
   - Bugs fixes:
