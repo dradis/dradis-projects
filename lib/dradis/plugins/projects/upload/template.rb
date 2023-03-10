@@ -91,6 +91,4 @@ module Dradis::Plugins::Projects::Upload
   end
 end
 
-require_relative 'v1/template'
-require_relative 'v2/template'
-require_relative 'v3/template'
+require_relative 'v4/template'

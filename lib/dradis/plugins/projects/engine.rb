@@ -19,7 +19,7 @@ module Dradis
         initializer "dradis-projects.set_configs" do |app|
           options = app.config.dradis.projects
           options.template_exporter ||= Dradis::Plugins::Projects::Export::V4::Template
-          options.template_uploader ||= Dradis::Plugins::Projects::Upload::V3::Template::Importer
+          options.template_uploader ||= Dradis::Plugins::Projects::Upload::V4::Template::Importer
         end
 
 

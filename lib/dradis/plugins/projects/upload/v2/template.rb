@@ -1,3 +1,11 @@
+# DEPRECATED - this class is v2 of the Template Importer and shouldn't be updated.
+# V4 released on Apr 2022
+# V2 can be removed on Apr 2024
+#
+# We're duplicating this file for v4, and even though the code lives in two
+# places now, this file isn't expected to evolved and is now frozen to V2
+# behavior.
+
 module Dradis::Plugins::Projects::Upload::V2
   module Template
     class Importer < Dradis::Plugins::Projects::Upload::V1::Template::Importer
