@@ -1,3 +1,11 @@
+# DEPRECATED - this class is v1 of the Template Importer and shouldn't be updated.
+# V4 released on Apr 2022
+# V1 can be removed on Apr 2024
+#
+# We're duplicating this file for v4, and even though the code lives in two
+# places now, this file isn't expected to evolved and is now frozen to V1
+# behavior.
+
 # frozen_string_literal: true
 
 require 'rails_helper'

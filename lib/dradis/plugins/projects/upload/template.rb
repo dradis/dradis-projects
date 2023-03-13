@@ -33,7 +33,6 @@ module Dradis::Plugins::Projects::Upload
       # table to re-associate the attachments in the project archive with the new
       # node IDs in the current project.
       def import(params={})
-
         # load the template
         logger.info { "Loading template file from: #{params[:file]}" }
         template = Nokogiri::XML(File.read(params[:file]))
@@ -43,6 +42,7 @@ module Dradis::Plugins::Projects::Upload
           logger.error { "Invalid project template format." }
           return false
         end
+
 
         if template.xpath('/dradis-template').empty?
           error = "The uploaded file doesn't look like a Dradis project template (/dradis-template)."
