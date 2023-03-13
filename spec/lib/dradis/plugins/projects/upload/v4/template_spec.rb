@@ -1,3 +1,6 @@
+# Run the spec in CE/Pro context with:
+# rspec <relative path to dradis-projects>/spec/lib/dradis/plugins/projects/upload/v4/template_spec.rb
+
 require 'rails_helper'
 
 describe 'Dradis::Plugins::Projects::Upload::V4::Template::Importer' do
