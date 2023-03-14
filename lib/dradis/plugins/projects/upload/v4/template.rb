@@ -89,7 +89,7 @@ module Dradis::Plugins::Projects::Upload::V4
         # TODO: Need to find some way of checking for dups
         # May be combination of text, category_id and created_at
         issue.author   = xml_issue.at_xpath('author').text.strip
-        issue.state    = xml_issue.at_xpath('state')&.text || 'draft'
+        issue.state    = xml_issue.at_xpath('state')&.text || :published
         issue.text     = xml_issue.at_xpath('text').text
         issue.node     = project.issue_library
         issue.category = Category.issue
