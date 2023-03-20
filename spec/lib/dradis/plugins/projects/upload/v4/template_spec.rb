@@ -140,19 +140,28 @@ describe 'Dradis::Plugins::Projects::Upload::V4::Template::Importer' do
       )
     end
 
-    context 'uploading a template with states' do
-      it 'imports issues with states from the template' do
-        @importer.import(file: File.join(dir, 'with_states.xml'))
+    context 'uploading a template without states' do
+      it 'imports issues with the published state' do
+        @importer.import(file: File.join(dir, 'with_comments.xml'))
         issue = project.issues.first
-        expect(issue.state).to eq('ready_for_review')
+        expect(issue.state).to eq('published')
       end
     end
 
-    context 'uploading a template without states' do
-      it 'imports issues with the draft state' do
-        @importer.import(file: File.join(dir, 'with_comments.xml'))
-        issue = project.issues.first
-        expect(issue.state).to eq('draft')
+    context 'uploading a template with states' do
+      context 'valid states' do
+        it 'imports issues with states from the template' do
+          @importer.import(file: File.join(dir, 'with_states.xml'))
+          issue = project.issues.first
+          expect(issue.state).to eq('ready_for_review')
+        end
+      end
+
+      context 'invalid states' do
+        it 'does not import the issue' do
+          @importer.import(file: File.join(dir, 'with_invalid_states.xml'))
+          expect(project.issues.count).to eq(0)
+        end
       end
     end
   end
