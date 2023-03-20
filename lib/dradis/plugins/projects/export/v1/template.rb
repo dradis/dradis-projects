@@ -3,7 +3,7 @@
 # V1 can be removed on Apr 2024
 #
 # We're duplicating this file for v4, and even though the code lives in two
-# places now, this file isn't expected to evolved and is now frozen to V1
+# places now, this file isn't expected to evolve and is now frozen to V1
 # behavior.
 
 module Dradis::Plugins::Projects::Export::V1
