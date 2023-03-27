@@ -22,7 +22,7 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency 'bundler', '~> 2.2'
   spec.add_development_dependency 'combustion'
-  spec.add_development_dependency 'rake', '~> 10.0'
+  spec.add_development_dependency 'rake', '>= 12.3.3'
   spec.add_development_dependency 'rspec'
 
   spec.add_dependency 'dradis-plugins', '~> 4.0'
