@@ -1,3 +1,6 @@
+v4.8.0 (MONTH 2023)
+  - Update export button copy
+
 v4.7.0 (February 2023)
   - No changes
 
