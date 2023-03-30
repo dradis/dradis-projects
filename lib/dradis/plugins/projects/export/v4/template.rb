@@ -126,6 +126,9 @@ module Dradis::Plugins::Projects::Export::V4
       end
     end
 
+    # No-op here, overwritten in PRO
+    def build_report_content(builder); end
+
     def build_tags(builder)
       tags = project.tags
       builder.tags do |tags_builder|
