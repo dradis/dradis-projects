@@ -1,3 +1,11 @@
+# DEPRECATED - this class is v2 of the Template Exporter and shouldn't be updated.
+# V4 released on Apr 2022
+# V2 can be removed on Apr 2024
+#
+# We're duplicating this file for v4, and even though the code lives in two
+# places now, this file isn't expected to evolve and is now frozen to V2
+# behavior.
+
 module Dradis::Plugins::Projects::Export::V2
   class Template < Dradis::Plugins::Projects::Export::V1::Template
     VERSION = 2

@@ -1,14 +1,6 @@
-# DEPRECATED - this class is v1 of the Template Exporter and shouldn't be updated.
-# V4 released on Apr 2022
-# V1 can be removed on Apr 2024
-#
-# We're duplicating this file for v4, and even though the code lives in two
-# places now, this file isn't expected to evolve and is now frozen to V1
-# behavior.
-
-module Dradis::Plugins::Projects::Export::V1
+module Dradis::Plugins::Projects::Export::V4
   class Template < Dradis::Plugins::Projects::Export::Template
-    VERSION = 1
+    VERSION = 4
 
     protected
 
@@ -41,9 +33,6 @@ module Dradis::Plugins::Projects::Export::V1
       end
     end
 
-    # No-op here, overwritten in V2
-    def build_comments_for(builder, commentable); end
-
     def build_evidence_for_node(builder, node)
       builder.evidence do |evidences_builder|
         node.evidence.each do |evidence|
@@ -69,6 +58,7 @@ module Dradis::Plugins::Projects::Export::V1
           issues_builder.issue do |issue_builder|
             issue_builder.id(issue.id)
             issue_builder.author(issue.author)
+            issue_builder.state(issue.state)
             issue_builder.text do
               issue_builder.cdata!(issue.text)
             end
@@ -179,6 +169,39 @@ module Dradis::Plugins::Projects::Export::V1
     #   http://stackoverflow.com/questions/3174563/how-to-use-an-overridden-constant-in-an-inheritanced-class
     def version
       self.class::VERSION
+    end
+
+
+    # Export::V2::Template
+    #
+    def build_comments_for(builder, commentable)
+      builder.comments do |comments_builder|
+        commentable.comments.each do |comment|
+          comments_builder.comment do |comment_builder|
+            comment_builder.content do
+              comment_builder.cdata!(comment.content)
+            end
+            comment_builder.author(comment.user&.email)
+            comment_builder.created_at(comment.created_at.to_i)
+          end
+        end
+      end
+    end
+
+    # Export::V3::Template
+    #
+    def build_methodologies(builder)
+      boards = content_service.all_boards
+
+      builder.methodologies do |methodologies_builder|
+
+        boards.each do |board|
+          node_id =
+            board.node == project.methodology_library ? nil : board.node_id
+
+          board.to_xml(methodologies_builder, includes: [:activities, :assignees, :comments], version: VERSION)
+        end
+      end
     end
   end
 end

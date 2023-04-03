@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dradis-template version="4">
+  <nodes>
+    <node>
+      <id>3</id>
+      <label>Node 1</label>
+      <parent-id/>
+      <position>0</position>
+      <properties><![CDATA[{
+}]]></properties>
+      <type-id>1</type-id>
+      <notes>
+        <note>
+          <id>2</id>
+          <author>xavi</author>
+          <category-id>2</category-id>
+          <text><![CDATA[#[Title]#
+Note 1
+
+#[Description]#
+
+]]></text>
+          <activities>
+            <activity>
+              <action>create</action>
+              <user_email>xavi</user_email>
+              <created_at>1538467955</created_at>
+            </activity>
+          </activities>
+          <comments>
+            <comment>
+              <content><![CDATA[A comment on a note]]></content>
+              <author>xavi</author>
+              <created_at>1538467968</created_at>
+            </comment>
+          </comments>
+        </note>
+      </notes>
+      <evidence>
+        <evidence>
+          <id>386</id>
+          <author>xavi</author>
+          <issue-id>586</issue-id>
+          <content><![CDATA[#[Location]#
+A
+]]></content>
+          <activities>
+            <activity>
+              <action>create</action>
+              <user_email>xavi</user_email>
+              <created_at>1538549260</created_at>
+            </activity>
+          </activities>
+          <comments>
+            <comment>
+              <content><![CDATA[A comment on an evidence]]></content>
+              <author>xavi</author>
+              <created_at>1538549286</created_at>
+            </comment>
+          </comments>
+        </evidence>
+      </evidence>
+      <activities>
+        <activity>
+          <action>create</action>
+          <user_email>xavi</user_email>
+          <created_at>1538467945</created_at>
+        </activity>
+      </activities>
+    </node>
+  </nodes>
+  <issues>
+    <issue>
+      <id>586</id>
+      <author>xavi</author>
+      <state>fakestate</state>
+      <text><![CDATA[#[Title]#
+Issue 1
+
+#[Description]#
+
+]]></text>
+      <activities>
+        <activity>
+          <action>create</action>
+          <user_email>xavi</user_email>
+          <created_at>1538467938</created_at>
+        </activity>
+      </activities>
+      <comments>
+        <comment>
+          <content><![CDATA[A comment on an issue]]></content>
+          <author>xavi</author>
+          <created_at>1538467997</created_at>
+        </comment>
+      </comments>
+    </issue>
+  </issues>
+  <methodologies/>
+  <categories>
+    <category>
+      <id>1</id>
+      <name>Issue description</name>
+    </category>
+    <category>
+      <id>2</id>
+      <name>Default category</name>
+    </category>
+  </categories>
+  <tags/>
+</dradis-template>
