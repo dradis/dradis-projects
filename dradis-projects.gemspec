@@ -25,6 +25,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rake', '>= 12.3.3'
   spec.add_development_dependency 'rspec'
 
-  spec.add_dependency 'dradis-plugins', '~> 4.0'
+  spec.add_dependency 'dradis-plugins', '>= 4.8.0'
   spec.add_dependency 'rubyzip'
 end
