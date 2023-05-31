@@ -1,4 +1,4 @@
-v4.9.0 (Month 2023)
+v4.9.0 (June 2023)
   - Update views for compatibility with Bootstrap 5
 
 v4.8.0 (April 2023)
