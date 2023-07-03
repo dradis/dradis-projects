@@ -1,19 +1,15 @@
 <%= content_tag :div, id: 'plugin-projects', class: 'tab-pane fade' do %>
-  <%= form_tag project_export_manager_path(current_project), target: '_blank' do %>
-    <%= hidden_field_tag :plugin, 'projects' %>
+  <h4 class="header-underline mb-0">Ready when you are!</h4>
 
-    <h4 class="header-underline">Choose an export option</h4>
+  <div class="mt-4">
+    <%= form_tag dradis_projects.project_package_path(current_project), class: 'd-inline' do %>
+      <button id="export-button" class="btn btn-lg btn-primary">Export All as Package</button>
+    <% end %>
 
-    <div class="form-check">
-      <%= radio_button_tag :route, :package, true, :class => 'form-check-input' %>
-      <label class="form-check-label" for='route_package'>Package</label>
-    </div>
+    or
 
-    <div class="form-check">
-      <%= radio_button_tag :route, :template, false, :class => 'form-check-input' %>
-      <label class="form-check-label" for='route_template'>Template</label>
-    </div>
-
-    <button id="export-button" class="btn btn-lg btn-primary mt-4">Export All Records</button>
-  <% end %>
+    <%= form_tag dradis_projects.project_template_path(current_project), class: 'd-inline' do %>
+      <button id="export-button" class="btn btn-lg">Export All as Template</button>
+    <% end %>
+  </div>
 <% end%>

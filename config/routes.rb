@@ -1,4 +1,6 @@
 Dradis::Plugins::Projects::Engine.routes.draw do
-  resource :package,  only: [:show]
-  resource :template, only: [:show]
+  resources :projects, only: [] do
+    resource :package,  only: [:create]
+    resource :template, only: [:create]
+  end
 end
