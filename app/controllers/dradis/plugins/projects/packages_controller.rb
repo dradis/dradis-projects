@@ -5,11 +5,11 @@ module Dradis::Plugins::Projects
     def create
       filename = Rails.root.join('tmp', 'dradis-export.zip')
 
-      exporter = Dradis::Plugins::Projects::Export::Package.new({
-        project_id: params[:project_id],
+      options = export_params.merge({
         plugin: Dradis::Plugins::Projects,
         scope: :all
       })
+      exporter = Dradis::Plugins::Projects::Export::Package.new(options)
       template = exporter.export(filename: filename)
 
       send_file(filename)
