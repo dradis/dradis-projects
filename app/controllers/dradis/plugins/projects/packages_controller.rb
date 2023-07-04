@@ -1,6 +1,7 @@
 module Dradis::Plugins::Projects
   class PackagesController < Dradis::Plugins::Export::BaseController
     skip_before_action :validate_scope
+    skip_before_action :validate_template
 
     def create
       filename = Rails.root.join('tmp', 'dradis-export.zip')

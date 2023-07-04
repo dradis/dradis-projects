@@ -12,7 +12,7 @@ module Dradis
 
         initializer 'dradis-projects.mount_engine' do
           Rails.application.routes.append do
-            mount Dradis::Plugins::Projects::Engine => '/', as: :dradis_projects
+            mount Dradis::Plugins::Projects::Engine => '/export/projects', as: :dradis_projects
           end
         end
 
