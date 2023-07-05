@@ -1,5 +1,6 @@
 v4.10.0 (Month 2023)
-  - Update forms for compatibility with the Dradis export changes
+  - Implement handling of project exports directly from Tylium
+  - Update views for compatibility with Font Awesome 6
 
 v4.9.0 (June 2023)
   - Update views for compatibility with Bootstrap 5
