@@ -12,16 +12,15 @@ module Dradis
 
         initializer 'dradis-projects.mount_engine' do
           Rails.application.routes.append do
-            mount Dradis::Plugins::Projects::Engine => '/export/projects'
+            mount Dradis::Plugins::Projects::Engine => '/', as: :dradis_projects
           end
         end
 
-        initializer "dradis-projects.set_configs" do |app|
+        initializer 'dradis-projects.set_configs' do |app|
           options = app.config.dradis.projects
           options.template_exporter ||= Dradis::Plugins::Projects::Export::V4::Template
           options.template_uploader ||= Dradis::Plugins::Projects::Upload::V4::Template::Importer
         end
-
 
         # Because this plugin provides two export modules, we have to overwrite
         # the default .uploaders() method.

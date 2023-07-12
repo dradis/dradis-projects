@@ -1,8 +1,9 @@
 module Dradis::Plugins::Projects
   class TemplatesController < Dradis::Plugins::Export::BaseController
     skip_before_action :validate_scope
+    skip_before_action :validate_template
 
-    def show
+    def create
       # this allows us to have different exporters in different editions
       exporter_class = Rails.application.config.dradis.projects.template_exporter
 
