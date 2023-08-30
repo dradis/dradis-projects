@@ -1,4 +1,4 @@
-v4.10.0 (Month 2023)
+v4.10.0 (September 2023)
   - Implement handling of project exports directly from Tylium
   - Update views for compatibility with Font Awesome 6
 
