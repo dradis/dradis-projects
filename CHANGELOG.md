@@ -1,3 +1,6 @@
+v4.11.0 (January 2024)
+  - No changes
+
 v4.10.0 (September 2023)
   - Implement handling of project exports directly from Tylium
   - Update views for compatibility with Font Awesome 6
