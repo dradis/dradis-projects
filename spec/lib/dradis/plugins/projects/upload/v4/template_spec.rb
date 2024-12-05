@@ -7,6 +7,13 @@ describe 'Dradis::Plugins::Projects::Upload::V4::Template::Importer' do
   let(:project) { create(:project) }
   let(:user) { create(:user) }
   let(:importer_class) { Dradis::Plugins::Projects::Upload::Template }
+  let(:importer) do
+    importer_class::Importer.new(
+      default_user_id: user.id,
+      plugin: importer_class,
+      project_id: project.id
+    )
+  end
 
   context 'uploading a template with attachments url' do
     let(:file_path) do
@@ -14,12 +21,6 @@ describe 'Dradis::Plugins::Projects::Upload::V4::Template::Importer' do
     end
 
     it 'converts the urls' do
-      importer = importer_class::Importer.new(
-        default_user_id: user.id,
-        plugin: importer_class,
-        project_id: project.id
-      )
-
       importer.import(file: file_path)
 
       p_id = project.id
@@ -40,12 +41,6 @@ describe 'Dradis::Plugins::Projects::Upload::V4::Template::Importer' do
     end
 
     it 'returns false' do
-      importer = importer_class::Importer.new(
-        default_user_id: user.id,
-        plugin: importer_class,
-        project_id: project.id
-      )
-
       expect(importer.import(file: file_path)).to be false
     end
   end
@@ -87,12 +82,6 @@ describe 'Dradis::Plugins::Projects::Upload::V4::Template::Importer' do
     end
 
     before do
-      importer = importer_class::Importer.new(
-        default_user_id: user.id,
-        plugin: importer_class,
-        project_id: project.id
-      )
-
       importer.import(file: file_path)
     end
 
@@ -132,17 +121,9 @@ describe 'Dradis::Plugins::Projects::Upload::V4::Template::Importer' do
       File.join(File.dirname(__FILE__), '../../../../../../', 'fixtures', 'files')
     end
 
-    before do
-      @importer = importer_class::Importer.new(
-        default_user_id: user.id,
-        plugin: importer_class,
-        project_id: project.id
-      )
-    end
-
     context 'uploading a template without states' do
       it 'imports issues with the published state' do
-        @importer.import(file: File.join(dir, 'with_comments.xml'))
+        importer.import(file: File.join(dir, 'with_comments.xml'))
         issue = project.issues.first
         expect(issue.state).to eq('published')
       end
@@ -151,7 +132,7 @@ describe 'Dradis::Plugins::Projects::Upload::V4::Template::Importer' do
     context 'uploading a template with states' do
       context 'valid states' do
         it 'imports issues with states from the template' do
-          @importer.import(file: File.join(dir, 'with_states.xml'))
+          importer.import(file: File.join(dir, 'with_states.xml'))
           issue = project.issues.first
           expect(issue.state).to eq('ready_for_review')
         end
@@ -159,10 +140,36 @@ describe 'Dradis::Plugins::Projects::Upload::V4::Template::Importer' do
 
       context 'invalid states' do
         it 'does not import the issue' do
-          @importer.import(file: File.join(dir, 'with_invalid_states.xml'))
+          importer.import(file: File.join(dir, 'with_invalid_states.xml'))
           expect(project.issues.count).to eq(0)
         end
       end
+    end
+  end
+
+  describe 'tags' do
+    let(:file_path) do
+      File.join(
+        File.dirname(__FILE__),
+        '../../../../../../',
+        'fixtures',
+        'files',
+        'with_tags.xml'
+      )
+    end
+
+    it 'updates project tags according to the order in the template' do
+      importer.import(file: file_path)
+
+      tag_values = project.tags.pluck(:name, :position)
+      expected_values = [
+        ["!2ca02c_info", 1],
+        ["!ff7f0e_medium", 2],
+        ["!d62728_high", 3],
+        ["!6baed6_low", 4],
+        ["!9467bd_critical", 5]
+      ]
+      expect(tag_values).to eq(expected_values)
     end
   end
 end
