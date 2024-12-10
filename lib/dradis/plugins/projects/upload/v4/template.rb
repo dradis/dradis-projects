@@ -383,11 +383,14 @@ module Dradis::Plugins::Projects::Upload::V4
       def parse_tags(template)
         logger.info { 'Processing Tags...' }
 
-        template.xpath('dradis-template/tags/tag').each do |xml_tag|
+        template.xpath('dradis-template/tags/tag').each.with_index(1) do |xml_tag, index|
           name = xml_tag.at_xpath('name').text()
           tag_params = { name: name }
           tag_params[:project_id] = project.id if Tag.has_attribute?(:project_id)
+
           tag = Tag.where(tag_params).first_or_create
+          tag.update(position: index) unless tag.position == index
+
           logger.info { "New tag detected: #{name}" }
 
           xml_tag.xpath('./taggings/tagging').each do |xml_tagging|
