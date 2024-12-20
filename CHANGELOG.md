@@ -1,4 +1,4 @@
-v4.15.0 (Month 202X)
+v4.15.0 (December 2024)
   - Update tag position values on template upload
 
 v4.14.0 (October 2024)
