@@ -10,7 +10,7 @@ module Dradis::Plugins::Projects::Export
       filename = args[:filename]
       logger   = options.fetch(:logger, Rails.logger)
 
-      File.delete(filename) if File.exists?(filename)
+      File.delete(filename) if File.exist?(filename)
 
       logger.debug{ "Creating a new Zip file in #{filename}..." }
 
