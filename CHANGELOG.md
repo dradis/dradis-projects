@@ -1,3 +1,6 @@
+vX.X.X (Month 2025)
+  - Update File.exists? calls for ruby upgrade
+
 v4.17.0 (July 2025)
   - No changes
 

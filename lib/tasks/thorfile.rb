@@ -72,7 +72,7 @@ class UploadTasks < Thor
   def template(file_path)
     require 'config/environment'
 
-    unless File.exists?(file_path)
+    unless File.exist?(file_path)
       $stderr.puts "** the file [#{file_path}] does not exist"
       exit -1
     end
@@ -98,7 +98,7 @@ class UploadTasks < Thor
   def package(file_path)
     require 'config/environment'
 
-    unless File.exists?(file_path)
+    unless File.exist?(file_path)
       $stderr.puts "** the file [#{file_path}] does not exist"
       exit -1
     end
