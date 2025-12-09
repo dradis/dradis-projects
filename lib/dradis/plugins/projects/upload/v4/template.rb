@@ -257,11 +257,11 @@ module Dradis::Plugins::Projects::Upload::V4
         # There are exceptions to the rule, when it does not make sense to have
         # more than one of this nodes, in any given tree:
         # - the Configuration.uploadsNode node (detected by its label)
-        # - any nodes with type different from DEFAULT or HOST
+        # - any system nodes: Methodology, IssueLib, ContentLib
         if label == Configuration.plugin_uploads_node
           node = project.nodes.create_with(type_id: type_id, parent_id: parent_id)
               .find_or_create_by!(label: label)
-        elsif Node::Types::USER_TYPES.exclude?(type_id.to_i)
+        elsif Node::Types::SYSTEM_TYPES.include?(type_id.to_i)
           node = project.nodes.create_with(label: label)
               .find_or_create_by!(type_id: type_id)
         else
