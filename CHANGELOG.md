@@ -1,3 +1,6 @@
+vx.xx.0 (Xxxx 2026)
+  - Upload::Template: use SYSTEM_TYPES for special nodes.
+
 v4.19.0 (November 2025)
   - No changes
 
