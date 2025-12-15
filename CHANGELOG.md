@@ -1,138 +1,180 @@
 vx.xx.0 (Xxxx 2026)
-  - Upload::Template: use SYSTEM_TYPES for special nodes.
+
+- Update export button styling
+- Upload::Template: use SYSTEM_TYPES for special nodes.
 
 v4.19.0 (November 2025)
-  - No changes
+
+- No changes
 
 v4.18.0 (September 2025)
-  - Update File.exists? calls for ruby upgrade
+
+- Update File.exists? calls for ruby upgrade
 
 v4.17.0 (July 2025)
-  - No changes
+
+- No changes
 
 v4.16.0 (May 2025)
-  - No changes
+
+- No changes
 
 v4.15.0 (December 2024)
-  - Update tag position values on template upload
+
+- Update tag position values on template upload
 
 v4.14.0 (October 2024)
-  - No changes
+
+- No changes
 
 v4.13.0 (July 2024)
-  - No changes
+
+- No changes
 
 v4.12.0 (May 2024)
-  - No changes
+
+- No changes
 
 v4.11.0 (January 2024)
-  - No changes
+
+- No changes
 
 v4.10.0 (September 2023)
-  - Implement handling of project exports directly from Tylium
-  - Update views for compatibility with Font Awesome 6
-  - Update gemspec links
+
+- Implement handling of project exports directly from Tylium
+- Update views for compatibility with Font Awesome 6
+- Update gemspec links
 
 v4.9.0 (June 2023)
-  - Update views for compatibility with Bootstrap 5
+
+- Update views for compatibility with Bootstrap 5
 
 v4.8.0 (April 2023)
-  - Add exporting and uploading states
-  - Update export button copy
+
+- Add exporting and uploading states
+- Update export button copy
 
 v4.7.0 (February 2023)
-  - No changes
+
+- No changes
 
 v4.6.0 (November 2022)
-  - No changes
+
+- No changes
 
 v4.5.0 (August 2022)
-  - No changes
+
+- No changes
 
 v4.4.0 (June 2022)
-  - Provide plugin template mappings (no mappings)
+
+- Provide plugin template mappings (no mappings)
 
 v4.3.0 (April 2022)
-  - No changes
+
+- No changes
 
 v4.2.0 (February 2022)
-  - Bugs fixes:
-    - Fix missing nodes for attachments during template and package imports
-    - Fix missing parent nodes during template and package imports
+
+- Bugs fixes:
+  - Fix missing nodes for attachments during template and package imports
+  - Fix missing parent nodes during template and package imports
 
 v4.1.2.1 (December 2021)
-  - Security Fixes:
-    - High: Authenticated author path traversal
+
+- Security Fixes:
+  - High: Authenticated author path traversal
 
 v4.1.1 (November 2021)
-  - Loosen dradis-plugins version requirement
+
+- Loosen dradis-plugins version requirement
 
 v4.1.0 (November 2021)
-  - No changes
+
+- No changes
 
 v4.0.0 (July 2021)
-  - No changes
+
+- No changes
 
 v3.22.0 (April 2021)
-  - No changes
+
+- No changes
 
 v3.21.0 (February 2021)
-  - No changes
+
+- No changes
 
 v3.20.0 (January 2020)
-  - Add views for the export view
-  - Fix exporting projects with comments by deleted users
+
+- Add views for the export view
+- Fix exporting projects with comments by deleted users
 
 v3.19.0 (September 2020)
-  - No changes
+
+- No changes
 
 v3.18.0 (July 2020)
-  - No changes
+
+- No changes
 
 v3.17.0 (May 2020)
-  - No changes
+
+- No changes
 
 v3.16.0 (February 2020)
-  - No changes
+
+- No changes
 
 v3.15.0 (November 2019)
-  - Being able to export/upload boards (v3)
-  - Fix upload with attachments
+
+- Being able to export/upload boards (v3)
+- Fix upload with attachments
 
 v3.14.1 (October 2019)
-  - Fix directory traversal vulnerability
+
+- Fix directory traversal vulnerability
 
 v3.14.0 (August 2019)
-  - No changes
+
+- No changes
 
 v3.13.0 (June 2019)
-  - No changes
+
+- No changes
 
 v3.12.0 (March 2019)
-  - No changes
+
+- No changes
 
 v3.11.0 (November 2018)
-  - Note and evidence comments in export/import
+
+- Note and evidence comments in export/import
 
 v3.10.0 (August 2018)
-  - Check project existence for default user id
-  - Issue comments in export/import
-  - Replace Node methods that are now Project methods
-  - Use project scopes
+
+- Check project existence for default user id
+- Issue comments in export/import
+- Replace Node methods that are now Project methods
+- Use project scopes
 
 v3.9.0 (January 2018)
-  - Add default user id as fallback for activity user when importing
-  - Fix nodes upload
+
+- Add default user id as fallback for activity user when importing
+- Fix nodes upload
 
 v3.8.0 (September 2017)
-  - Add parse_report_content placeholders to import/export
-  - Add version attribute to exported methodologies
+
+- Add parse_report_content placeholders to import/export
+- Add version attribute to exported methodologies
 
 v3.7.0 (July 2017)
-  - Skip closing the logger in thorfile
+
+- Skip closing the logger in thorfile
 
 v3.6.0 (March 2017)
-  - Break down the #export and #parse methods into smaller tasks
-  - Include file version in project template export
-  - Make the project template exporter / uploader configurable
-  - Stop using homegrown configuration and use `Rails.application.config`
+
+- Break down the #export and #parse methods into smaller tasks
+- Include file version in project template export
+- Make the project template exporter / uploader configurable
+- Stop using homegrown configuration and use `Rails.application.config`
