@@ -1,4 +1,4 @@
-vx.xx.0 (Xxxx 2026)
+v5.0.0 (March 2026)
 
 - Update export button styling
 - Upload::Template: use SYSTEM_TYPES for special nodes.
