@@ -10,7 +10,7 @@ class ExportTasks < Thor
   def template
     require 'config/environment'
 
-    template_path = options.file || Rails.root.join('backup').to_s
+    template_path = options.file || Rails.root.join('tmp').to_s
     FileUtils.mkdir_p(template_path) unless File.exist?(template_path)
 
     unless template_path =~ /\.xml\z/
@@ -42,7 +42,7 @@ class ExportTasks < Thor
   def package
     require 'config/environment'
 
-    package_path  = options.file || Rails.root.join('backup')
+    package_path  = options.file || Rails.root.join('tmp').to_s
     FileUtils.mkdir_p(package_path) unless File.exist?(package_path)
 
     unless package_path.to_s =~ /\.zip\z/
