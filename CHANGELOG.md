@@ -1,3 +1,6 @@
+v5.3.0 (Month 2026)
+  - Export::Template: scrub invalid UTF-8 byte sequences before writing the package XML
+
 v5.2.0 (June 2026)
   - No changes
 

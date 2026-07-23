@@ -67,6 +67,18 @@ describe 'Dradis::Plugins::Projects::Export::V4::Template' do
       end
     end
 
+    describe 'invalid UTF-8 content' do
+      before do
+        create(:issue, text: 'placeholder', node: project.issue_library)
+        allow_any_instance_of(Issue).to receive(:text).and_return("Issue with invalid byte: \xC3\x28")
+      end
+
+      it 'exports valid UTF-8' do
+        expect(export.encoding).to eq(Encoding::UTF_8)
+        expect(export.valid_encoding?).to eq(true)
+      end
+    end
+
     describe 'states' do
       before do
         Issue.states.each do |state|

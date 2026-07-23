@@ -13,7 +13,12 @@ module Dradis::Plugins::Projects::Export
         build_tags(template_builder)
         build_report_content(template_builder)
       end
-      return result
+
+      # Content pasted from external tools (scanners, browsers, etc.) can
+      # contain byte sequences that aren't valid UTF-8. Left unscrubbed,
+      # they produce a package that imports as a blank project with no
+      # visible error.
+      result.scrub
     end
 
     private
