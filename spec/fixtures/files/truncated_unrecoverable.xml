@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dradis-template version="4">
+  <categories></categories>
+  <nodes>
+    <node>
+      <id>1</id>
+      <label>Node A</label>
+      <type-id>0</type-id>
+      <parent-id></parent-id>
