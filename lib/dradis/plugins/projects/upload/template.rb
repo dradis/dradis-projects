@@ -58,7 +58,7 @@ module Dradis::Plugins::Projects::Upload
         end
 
         if template.errors.any?
-          logger.warn { "Nokogiri reported recoverable parse warnings: #{template.errors.map(&:message).join('; ')}" }
+          logger.warn { "The XML parser reported recoverable warnings: #{template.errors.map(&:message).join('; ')}" }
         end
 
         if template.xpath('/dradis-template').empty?
