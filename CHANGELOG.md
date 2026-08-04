@@ -1,3 +1,6 @@
+v5.3.0 (August 2026)
+  - Fix error handling of the package upload when an invalid template is found
+
 v5.2.0 (June 2026)
   - No changes
 

@@ -46,6 +46,7 @@ module Dradis::Plugins::Projects::Upload
                           options.merge plugin: Dradis::Plugins::Projects::Upload::Template
                         )
           lookup_table = importer.import(file: template_file)
+          raise 'Failed to import the project template file.' unless lookup_table
           logger.info { 'Done.' }
 
 

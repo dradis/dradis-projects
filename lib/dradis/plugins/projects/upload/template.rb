@@ -12,6 +12,18 @@ module Dradis::Plugins::Projects::Upload
     class Importer < Dradis::Plugins::Upload::Importer
       attr_accessor :lookup_table, :template_version
 
+      # libxml2 error codes for isolated, single-character fixups that don't
+      # affect document structure (e.g. an invalid byte gets swapped for the
+      # unicode replacement character). Safe to recover from and continue.
+      #
+      # Any other error code (tag mismatches, premature end of data, undefined
+      # entities, etc.) indicates the document was actually truncated or
+      # corrupted, so those must still cause a hard failure.
+      RECOVERABLE_ERROR_CODES = [
+        9,  # XML_ERR_INVALID_CHAR
+        81  # XML_ERR_INVALID_ENCODING
+      ].freeze
+
       def self.templates
         { }
       end
@@ -38,11 +50,16 @@ module Dradis::Plugins::Projects::Upload
         template = Nokogiri::XML(File.read(params[:file]))
         logger.info { "Done." }
 
-        unless template.errors.empty?
-          logger.error { "Invalid project template format." }
+        unrecoverable_errors = template.errors.reject { |e| RECOVERABLE_ERROR_CODES.include?(e.code) }
+
+        unless unrecoverable_errors.empty?
+          logger.error { "Invalid project template format: #{unrecoverable_errors.map(&:message).join('; ')}" }
           return false
         end
 
+        if template.errors.any?
+          logger.warn { "The XML parser reported recoverable warnings: #{template.errors.map(&:message).join('; ')}" }
+        end
 
         if template.xpath('/dradis-template').empty?
           error = "The uploaded file doesn't look like a Dradis project template (/dradis-template)."

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dradis-template version="4">
+  <categories></categories>
+  <nodes></nodes>
+  <issues>
+    <issue>
+      <id>1</id>
+      <author>tester</author>
+      <text><![CDATA[#[Title]#
+Sample Issueÿ
+
+#[Description]#
+This is a valid issue used to confirm recoverable XML errors don't block import.
+]]></text>
+    </issue>
+  </issues>
+  <methodologies></methodologies>
+  <tags></tags>
+</dradis-template>
