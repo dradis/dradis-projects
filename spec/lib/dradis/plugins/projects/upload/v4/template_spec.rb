@@ -127,6 +127,12 @@ describe 'Dradis::Plugins::Projects::Upload::V4::Template::Importer' do
         issue = project.issues.first
         expect(issue.state).to eq('published')
       end
+
+      it 'imports evidence with the published state' do
+        importer.import(file: File.join(dir, 'with_comments.xml'))
+        evidence = project.evidence.first
+        expect(evidence.state).to eq('published')
+      end
     end
 
     context 'uploading a template with states' do
@@ -135,6 +141,12 @@ describe 'Dradis::Plugins::Projects::Upload::V4::Template::Importer' do
           importer.import(file: File.join(dir, 'with_states.xml'))
           issue = project.issues.first
           expect(issue.state).to eq('ready_for_review')
+        end
+
+        it 'imports evidence with states from the template' do
+          importer.import(file: File.join(dir, 'with_evidence_states.xml'))
+          evidence = project.evidence.first
+          expect(evidence.state).to eq('draft')
         end
       end
 

@@ -328,7 +328,8 @@ module Dradis::Plugins::Projects::Upload::V4
                          author:   xml_evidence.at_xpath('author').text.strip,
                          node_id:  node.id,
                          content:  xml_evidence.at_xpath('content').text,
-                         issue_id: xml_evidence.at_xpath('issue-id').text.strip
+                         issue_id: xml_evidence.at_xpath('issue-id').text.strip,
+                         state:    xml_evidence.at_xpath('state')&.text || :published
                        )
 
             evidence.update_attribute(:created_at, created_at.text.strip) if created_at

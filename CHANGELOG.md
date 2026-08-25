@@ -1,3 +1,7 @@
+[v#.#.#] ([month] [YYYY])
+  - Bugs fixed:
+    - Preserve Evidence's review state when exporting and re-importing a project (project backup/restore and Clone project)
+
 v5.3.0 (August 2026)
   - Fix error handling of the package upload when an invalid template is found
 
