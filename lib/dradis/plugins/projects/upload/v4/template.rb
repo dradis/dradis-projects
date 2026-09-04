@@ -88,10 +88,10 @@ module Dradis::Plugins::Projects::Upload::V4
       def create_issue(issue, xml_issue)
         # TODO: Need to find some way of checking for dups
         # May be combination of text, category_id and created_at
-        issue.author   = xml_issue.at_xpath('author').text.strip
-        issue.state    = xml_issue.at_xpath('state')&.text || :published
-        issue.text     = xml_issue.at_xpath('text').text
-        issue.node     = project.issue_library
+        issue.author = xml_issue.at_xpath('author').text.strip
+        issue.state = xml_issue.at_xpath('state')&.text || :published
+        issue.text = xml_issue.at_xpath('text').text
+        issue.node = project.issue_library
         issue.category = Category.issue
 
         return false unless validate_and_save(issue)
@@ -169,8 +169,8 @@ module Dradis::Plugins::Projects::Upload::V4
         logger.info { 'Processing Categories...' }
 
         template.xpath('dradis-template/categories/category').each do |xml_category|
-          old_id   = Integer(xml_category.at_xpath('id').text.strip)
-          name     = xml_category.at_xpath('name').text.strip
+          old_id = Integer(xml_category.at_xpath('id').text.strip)
+          name = xml_category.at_xpath('name').text.strip
           category = nil
 
           # Prevent creating duplicate categories
@@ -210,7 +210,7 @@ module Dradis::Plugins::Projects::Upload::V4
 
       def parse_methodologies(template)
         methodology_category = Category.default
-        methodology_library  = project.methodology_library
+        methodology_library = project.methodology_library
 
         logger.info { 'Processing Methodologies...' }
 
@@ -224,10 +224,10 @@ module Dradis::Plugins::Projects::Upload::V4
           # MethodologiesController#create action (i.e. 'methodology builder' is
           # used).
           Note.create!(
-            author:      'methodology importer',
-            node_id:     methodology_library.id,
+            author: 'methodology importer',
+            node_id: methodology_library.id,
             category_id: methodology_category.id,
-            text:        xml_methodology.at_xpath('text').text
+            text: xml_methodology.at_xpath('text').text
           )
         end
 
@@ -235,18 +235,18 @@ module Dradis::Plugins::Projects::Upload::V4
       end
 
       def parse_node(xml_node)
-        element   = xml_node.at_xpath('type-id')
-        type_id   = element.text.nil? ? nil : element.text.strip
-        label     = xml_node.at_xpath('label').text.strip
-        element   = xml_node.at_xpath('parent-id')
+        element = xml_node.at_xpath('type-id')
+        type_id = element.text.nil? ? nil : element.text.strip
+        label = xml_node.at_xpath('label').text.strip
+        element = xml_node.at_xpath('parent-id')
         parent_id = element.text.blank? ? nil : element.text.strip
 
         # Node positions
-        element  = xml_node.at_xpath('position')
+        element = xml_node.at_xpath('position')
         position = (element && !element.text.nil?) ? element.text.strip : nil
 
         # Node properties
-        element    = xml_node.at_xpath('properties')
+        element = xml_node.at_xpath('properties')
         properties = (element && !element.text.blank?) ? element.text.strip : nil
 
         created_at = xml_node.at_xpath('created-at')
@@ -271,10 +271,10 @@ module Dradis::Plugins::Projects::Upload::V4
           has_nil_parent = !parent_id
           node =
             project.nodes.new(
-              type_id:   type_id,
-              label:     label,
+              type_id: type_id,
+              label: label,
               parent_id: parent_id,
-              position:  position
+              position: position
             )
           node.save!(validate: has_nil_parent)
           pending_changes[:orphan_nodes]  << node if parent_id
@@ -325,17 +325,17 @@ module Dradis::Plugins::Projects::Upload::V4
             updated_at  = xml_evidence.at_xpath('updated-at')
 
             evidence = Evidence.new(
-                         author:   xml_evidence.at_xpath('author').text.strip,
-                         node_id:  node.id,
-                         content:  xml_evidence.at_xpath('content').text,
+                         author: xml_evidence.at_xpath('author').text.strip,
+                         node_id: node.id,
+                         content: xml_evidence.at_xpath('content').text,
                          issue_id: xml_evidence.at_xpath('issue-id').text.strip,
-                         state:    xml_evidence.at_xpath('state')&.text || :published
+                         state: xml_evidence.at_xpath('state')&.text || :published
                        )
 
             evidence.update_attribute(:created_at, created_at.text.strip) if created_at
             evidence.update_attribute(:updated_at, updated_at.text.strip) if updated_at
 
-            pending_changes[:evidence]          << evidence
+            pending_changes[:evidence] << evidence
             pending_changes[:evidence_activity] << xml_evidence.xpath('activities/activity')
             pending_changes[:evidence_comments] << xml_evidence.xpath('comments/comment')
 
@@ -356,10 +356,10 @@ module Dradis::Plugins::Projects::Upload::V4
 
             logger.info { "Note category rewrite, used to be #{old_id}, now is #{new_id}" }
             note = Note.create!(
-                     author:      xml_note.at_xpath('author').text.strip,
-                     node_id:     node.id,
+                     author: xml_note.at_xpath('author').text.strip,
+                     node_id: node.id,
                      category_id: new_id,
-                     text:        xml_note.at_xpath('text').text
+                     text: xml_note.at_xpath('text').text
                    )
 
             note.update_attribute(:created_at, created_at.text.strip) if created_at
@@ -467,14 +467,14 @@ module Dradis::Plugins::Projects::Upload::V4
       #
       # Returns nothing, but creates a new Assignee for this card.
       def create_assignee(card, xml_assignee)
-        email   = xml_assignee.text()
+        email = xml_assignee.text()
         user_id = user_id_for_email(email)
 
         if user_id == -1
           old_assignee_field = card.fields['FormerAssignees'] || ''
           card.set_field 'FormerAssignees', old_assignee_field << "* #{email}\n"
         else
-          old_assignee_ids  = card.assignee_ids
+          old_assignee_ids = card.assignee_ids
           card.assignee_ids = old_assignee_ids + [user_id]
         end
       end
@@ -573,8 +573,8 @@ module Dradis::Plugins::Projects::Upload::V4
       def process_methodologies(template)
         logger.info { 'Processing Methodologies...' }
 
-        lookup_table[:cards]    = {}
-        lookup_table[:lists]    = {}
+        lookup_table[:cards] = {}
+        lookup_table[:lists] = {}
         pending_changes[:cards] = []
         pending_changes[:lists] = []
 
