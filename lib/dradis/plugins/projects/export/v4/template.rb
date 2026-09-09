@@ -39,6 +39,7 @@ module Dradis::Plugins::Projects::Export::V4
           evidences_builder.evidence do |evidence_builder|
             evidence_builder.id(evidence.id)
             evidence_builder.author(evidence.author)
+            evidence_builder.state(evidence.state)
             evidence_builder.tag!('issue-id', evidence.issue_id)
             evidence_builder.content do
               evidence_builder.cdata!(evidence.content)

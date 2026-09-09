@@ -80,5 +80,19 @@ describe 'Dradis::Plugins::Projects::Export::V4::Template' do
         end
       end
     end
+
+    describe 'evidence states' do
+      before do
+        Evidence.states.each do |state|
+          create(:evidence, node: @node, issue: @issue, state: state[0])
+        end
+      end
+
+      it 'exports evidence with states' do
+        Evidence.states.each do |state|
+          expect(export).to include("<state>#{state[0]}</state>")
+        end
+      end
+    end
   end
 end
