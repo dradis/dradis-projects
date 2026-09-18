@@ -14,7 +14,7 @@ module Dradis::Plugins::Projects::Export
 
       logger.debug{ "Creating a new Zip file in #{filename}..." }
 
-      Zip::File.open(filename, Zip::File::CREATE) do |zipfile|
+      Zip::File.open(filename, create: true) do |zipfile|
         @project.nodes.each do |node|
           node_path = Attachment.pwd.join(node.id.to_s)
 

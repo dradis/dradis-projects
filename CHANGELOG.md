@@ -1,4 +1,4 @@
-[v#.#.#] ([month] [YYYY])
+v5.4.0 (September 2026)
   - Preserve Evidence's review state when exporting and re-importing a project (project backup/restore and Clone project)
 
 v5.3.0 (August 2026)
