@@ -1,3 +1,6 @@
+v5.5.0 (November 2026)
+  - No changes
+
 v5.4.0 (September 2026)
   - Preserve Evidence's review state when exporting and re-importing a project (project backup/restore and Clone project)
 
