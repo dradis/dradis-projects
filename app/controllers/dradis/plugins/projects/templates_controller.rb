@@ -15,7 +15,7 @@ module Dradis::Plugins::Projects
       template = exporter.export
       filename = 'dradis-template.xml'
 
-      track_download(filename: filename, size: template.bytesize) if defined?(Dradis::Pro)
+      track_download(event: 'file.downloaded', filename: filename, size: template.bytesize) if defined?(Dradis::Pro)
 
       send_data(template, filename: filename, type: :xml)
     end
