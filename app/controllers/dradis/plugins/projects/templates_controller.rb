@@ -13,8 +13,11 @@ module Dradis::Plugins::Projects
       )
       exporter = exporter_class.new(options)
       template = exporter.export
+      filename = 'dradis-template.xml'
 
-      send_data(template, filename: 'dradis-template.xml', type: :xml)
+      track_download(filename: filename, size: template.bytesize, type: 'project_template') if defined?(Dradis::Pro)
+
+      send_data(template, filename: filename, type: :xml)
     end
   end
 end

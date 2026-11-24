@@ -1,3 +1,16 @@
+[v#.#.#] ([month] [YYYY])
+  - Audit: track the file name and size of project package and project template downloads
+  - Upgraded gems:
+    - [gem]
+  - Bugs fixes:
+    - [future tense verb] [bug fix]
+    - Bug tracker items:
+      - [item]
+  - Security Fixes:
+    - High: (Authenticated|Unauthenticated) (admin|author|contributor) [vulnerability description]
+    - Medium: (Authenticated|Unauthenticated) (admin|author|contributor) [vulnerability description]
+    - Low: (Authenticated|Unauthenticated) (admin|author|contributor) [vulnerability description]
+
 v5.5.0 (November 2026)
   - No changes
 
