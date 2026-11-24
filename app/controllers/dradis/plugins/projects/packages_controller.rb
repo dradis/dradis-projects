@@ -13,7 +13,7 @@ module Dradis::Plugins::Projects
       exporter = Dradis::Plugins::Projects::Export::Package.new(options)
       template = exporter.export(filename: filename)
 
-      track_download(event: 'file.downloaded', filename: File.basename(filename), size: File.size(filename)) if defined?(Dradis::Pro)
+      track_download(filename: File.basename(filename), size: File.size(filename), type: 'project_package') if defined?(Dradis::Pro)
 
       send_file(filename)
     end
