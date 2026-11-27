@@ -29,8 +29,9 @@ describe 'Dradis::Plugins::Projects::Upload::V4::Template::Importer' do
       expect(project.issues.first.text).to include(
         "!/pro/projects/#{p_id}/nodes/#{n_id}/attachments/hello.jpg!\n\n" +
         "!/projects/#{p_id}/nodes/#{n_id}/attachments/hello.jpg!\n\n" +
-        "!/pro/projects/#{p_id}/nodes/#{n_id}/attachments/hello.jpg!\n\n" +
-        "!/projects/#{p_id}/nodes/#{n_id}/attachments/hello.jpg!"
+        "!/pro/nodes/5/attachments/hello.jpg!\n\n" +
+        "!/nodes/5/attachments/hello.jpg!\n\n" +
+        "p=. !{border: 0px solid #000000; height: 174px; width: 246px;}/pro/projects/#{p_id}/nodes/#{n_id}/attachments/hello.jpg!"
       )
     end
   end

@@ -1,3 +1,7 @@
+[v#.#.#] ([month] [YYYY])
+  - Bugs fixes:
+    - Update image URLs that use the new image syntax when importing a project package
+
 v5.5.0 (November 2026)
   - No changes
 
