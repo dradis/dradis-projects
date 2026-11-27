@@ -4,8 +4,6 @@ module Dradis::Plugins::Projects::Upload::V4
 
       attr_accessor :attachment_notes, :logger, :pending_changes, :users
 
-      ATTACHMENT_URL = %r{^!(/[a-z]+)?/(?:projects/\d+/)?nodes/(\d+)/attachments/(.+)!$}
-
       def post_initialize(args={})
         @lookup_table = {
           categories: {},
@@ -195,7 +193,7 @@ module Dradis::Plugins::Projects::Upload::V4
 
           return false unless create_issue(issue, xml_issue)
 
-          if issue.text =~ %r{^!(.*)/nodes/(\d+)/attachments/(.+)!$}
+          if issue.text.match?(Attachment::SCREENSHOT_REGEX)
             pending_changes[:attachment_notes] << issue
           end
 
@@ -367,7 +365,7 @@ module Dradis::Plugins::Projects::Upload::V4
 
             raise "Couldn't save Note" unless validate_and_save(note)
 
-            if note.text =~ %r{^!(.*)/nodes/(\d+)/attachments/(.+)!$}
+            if note.text.match?(Attachment::SCREENSHOT_REGEX)
               pending_changes[:attachment_notes] << note
             end
 
@@ -420,10 +418,13 @@ module Dradis::Plugins::Projects::Upload::V4
       end
 
       def update_attachment_references(string)
-        string.gsub(ATTACHMENT_URL) do |attachment|
-          node_id = lookup_table[:nodes][$2.to_i]
+        string.gsub(Attachment::SCREENSHOT_REGEX) do |attachment|
+          # Skip external images, e.g. !https://example.com/image.png!
+          next attachment if $2
+
+          node_id = lookup_table[:nodes][$6.to_i]
           if node_id
-            "!%s/projects/%d/nodes/%d/attachments/%s!" % [$1, project.id, node_id, $3]
+            attachment.sub(%r{/projects/\d+/nodes/\d+/}, "/projects/#{project.id}/nodes/#{node_id}/")
           else
             logger.error { "The attachment wasn't included in the package: #{attachment}" }
             attachment

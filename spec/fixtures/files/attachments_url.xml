@@ -11,5 +11,7 @@ Test Issue
 
 !/nodes/5/attachments/hello.jpg!
 
+p=. !{border: 0px solid #000000; height: 174px; width: 246px;}/pro/projects/222/nodes/5/attachments/hello.jpg!
+
 ]]></text><activities></activities><comments></comments></issue></issues><methodologies></methodologies><categories>
 <category><id>2</id><name>Issue description</name></category></categories><tags/></dradis-template>
